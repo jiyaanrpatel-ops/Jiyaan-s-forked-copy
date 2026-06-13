@@ -1,0 +1,615 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>CauseCircuit — Contact</title>
+	<meta charset="utf-8" />
+	<link rel="shortcut icon" type="x-icon" href="images/causecircuit-logo.png">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+	<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	<style>
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+
+		#header {
+			position: fixed !important;
+			top: 0 !important; left: 0 !important; right: 0 !important;
+			width: 100% !important;
+			z-index: 10000 !important;
+			background: rgba(8, 14, 28, 0.96) !important;
+			backdrop-filter: blur(24px) saturate(180%) !important;
+			border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+			opacity: 1 !important; visibility: visible !important;
+			transform: translateY(0) !important;
+			transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+		}
+		#header h1 { display: flex !important; align-items: center !important; }
+		#header h1 a {
+			color: white !important; display: flex !important; align-items: center !important;
+			font-family: 'Space Grotesk', sans-serif !important; font-weight: 600 !important;
+			letter-spacing: -0.01em !important;
+		}
+		.header-logo { width: 38px; height: 38px; border-radius: 10px; margin-right: 12px; object-fit: cover; }
+		#header #nav ul.links li a {
+			color: rgba(255,255,255,0.7) !important;
+			font-family: 'Inter', sans-serif !important; font-size: 0.9rem !important;
+			font-weight: 500 !important; letter-spacing: 0.01em !important;
+			transition: color 0.2s ease !important;
+		}
+		#header #nav ul.links li a:hover { color: white !important; }
+		#header #mobile-menu-toggle { color: rgba(255,255,255,0.7) !important; }
+
+		body {
+			background: #080e1c;
+			font-family: 'Inter', sans-serif;
+			overflow-x: hidden;
+			padding-top: 80px;
+			min-height: 100vh;
+			color: #e2e8f0;
+		}
+
+		/* ── PAGE HERO ── */
+		.page-hero {
+			position: relative;
+			overflow: hidden;
+			padding: 100px 0 80px;
+			text-align: center;
+		}
+
+		/* Fine grid background */
+		.page-hero::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background-image:
+				linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+				linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+			background-size: 48px 48px;
+			mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 40%, transparent 100%);
+		}
+
+		/* Blue glow orb */
+		.page-hero::after {
+			content: '';
+			position: absolute;
+			top: -120px; left: 50%; transform: translateX(-50%);
+			width: 600px; height: 400px;
+			background: radial-gradient(ellipse, rgba(59,130,246,0.18) 0%, transparent 70%);
+			pointer-events: none;
+		}
+
+		.hero-inner {
+			position: relative;
+			z-index: 1;
+			max-width: 680px;
+			margin: 0 auto;
+			padding: 0 24px;
+		}
+
+		.hero-eyebrow {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			background: rgba(59,130,246,0.1);
+			border: 1px solid rgba(59,130,246,0.2);
+			border-radius: 100px;
+			padding: 6px 16px;
+			font-size: 0.78rem;
+			font-weight: 600;
+			color: #93c5fd;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			margin-bottom: 28px;
+		}
+
+		.hero-eyebrow svg { width: 12px; height: 12px; }
+
+		.page-hero h1 {
+			font-family: 'Space Grotesk', sans-serif;
+			font-size: clamp(2.6rem, 6vw, 4rem);
+			font-weight: 700;
+			letter-spacing: -0.03em;
+			line-height: 1.1;
+			color: #f8fafc;
+			margin-bottom: 20px;
+		}
+
+		.page-hero p {
+			font-size: 1.1rem;
+			line-height: 1.75;
+			color: #64748b;
+			max-width: 520px;
+			margin: 0 auto;
+		}
+
+		/* ── LAYOUT ── */
+		.section-main {
+			padding: 72px 0 100px;
+		}
+
+		.container {
+			max-width: 1080px;
+			margin: 0 auto;
+			padding: 0 clamp(20px, 5vw, 48px);
+		}
+
+		.contact-grid {
+			display: grid;
+			grid-template-columns: 340px 1fr;
+			gap: 48px;
+			align-items: start;
+		}
+
+		/* ── LEFT PANEL ── */
+		.info-panel {}
+
+		.info-panel-label {
+			font-size: 0.72rem;
+			font-weight: 600;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			color: #475569;
+			margin-bottom: 24px;
+		}
+
+		.info-items { display: flex; flex-direction: column; gap: 2px; }
+
+		.info-item {
+			display: flex;
+			align-items: center;
+			gap: 14px;
+			padding: 18px 20px;
+			border-radius: 12px;
+			transition: background 0.2s ease;
+			text-decoration: none;
+			cursor: default;
+		}
+
+		.info-item.linked { cursor: pointer; }
+		.info-item.linked:hover { background: rgba(255,255,255,0.04); }
+
+		.info-item-icon {
+			width: 38px; height: 38px;
+			border-radius: 10px;
+			background: rgba(255,255,255,0.05);
+			border: 1px solid rgba(255,255,255,0.07);
+			display: flex; align-items: center; justify-content: center;
+			flex-shrink: 0;
+			color: #60a5fa;
+		}
+
+		.info-item-icon svg { width: 16px; height: 16px; }
+
+		.info-item-body { min-width: 0; }
+
+		.info-item-label {
+			font-size: 0.78rem;
+			font-weight: 500;
+			color: #475569;
+			letter-spacing: 0.04em;
+			text-transform: uppercase;
+			margin-bottom: 2px;
+		}
+
+		.info-item-value {
+			font-size: 0.95rem;
+			font-weight: 500;
+			color: #cbd5e1;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		.info-item.linked .info-item-value { color: #60a5fa; }
+
+		.divider {
+			height: 1px;
+			background: rgba(255,255,255,0.06);
+			margin: 28px 0;
+		}
+
+		.social-label {
+			font-size: 0.72rem;
+			font-weight: 600;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			color: #475569;
+			margin-bottom: 16px;
+		}
+
+		.social-row { display: flex; gap: 10px; }
+
+		.social-icon {
+			width: 40px; height: 40px;
+			border-radius: 10px;
+			border: 1px solid rgba(255,255,255,0.08);
+			background: rgba(255,255,255,0.04);
+			display: flex; align-items: center; justify-content: center;
+			color: #64748b;
+			text-decoration: none;
+			transition: all 0.2s ease;
+		}
+
+		.social-icon:hover {
+			border-color: rgba(255,255,255,0.15);
+			color: #e2e8f0;
+			background: rgba(255,255,255,0.07);
+		}
+
+		.social-icon svg { width: 17px; height: 17px; }
+
+		/* ── FORM CARD ── */
+		.form-card {
+			background: #0d1526;
+			border: 1px solid rgba(255,255,255,0.07);
+			border-radius: 20px;
+			overflow: hidden;
+		}
+
+		.form-card-top {
+			padding: 36px 40px 32px;
+			border-bottom: 1px solid rgba(255,255,255,0.05);
+		}
+
+		.form-card-top h2 {
+			font-family: 'Space Grotesk', sans-serif;
+			font-size: 1.5rem;
+			font-weight: 600;
+			color: #f1f5f9;
+			letter-spacing: -0.02em;
+			margin-bottom: 4px;
+		}
+
+		.form-card-top p {
+			font-size: 0.9rem;
+			color: #475569;
+			line-height: 1.5;
+		}
+
+		.form-body { padding: 32px 40px 36px; }
+
+		.form-row {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 16px;
+		}
+
+		.field { margin-bottom: 20px; }
+
+		.field label {
+			display: block;
+			font-size: 0.8rem;
+			font-weight: 500;
+			color: #64748b;
+			letter-spacing: 0.05em;
+			text-transform: uppercase;
+			margin-bottom: 8px;
+		}
+
+		.field label .req { color: #3b82f6; margin-left: 2px; }
+
+		.field input,
+		.field select,
+		.field textarea {
+			width: 100%;
+			background: rgba(255,255,255,0.04);
+			border: 1px solid rgba(255,255,255,0.08);
+			border-radius: 10px;
+			color: #e2e8f0;
+			padding: 13px 16px;
+			font-size: 0.95rem;
+			font-family: 'Inter', sans-serif;
+			transition: border-color 0.2s ease, background 0.2s ease;
+			outline: none;
+			appearance: none;
+		}
+
+		.field input::placeholder,
+		.field textarea::placeholder { color: #334155; }
+
+		.field input:focus,
+		.field select:focus,
+		.field textarea:focus {
+			border-color: rgba(59,130,246,0.5);
+			background: rgba(59,130,246,0.04);
+		}
+
+		.field select {
+			cursor: pointer;
+			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+			background-repeat: no-repeat;
+			background-position: right 14px center;
+			background-color: rgba(255,255,255,0.04);
+			padding-right: 42px;
+		}
+
+		.field select option { background: #0d1526; color: #e2e8f0; }
+
+		.field textarea { resize: vertical; min-height: 120px; line-height: 1.6; }
+
+		.form-footer {
+			padding: 0 40px 36px;
+			display: flex;
+			align-items: center;
+			gap: 20px;
+		}
+
+		.submit-btn {
+			flex-shrink: 0;
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			background: #2563eb;
+			color: white;
+			border: none;
+			padding: 14px 28px;
+			border-radius: 10px;
+			font-weight: 600;
+			font-size: 0.95rem;
+			cursor: pointer;
+			font-family: 'Inter', sans-serif;
+			transition: background 0.2s ease, transform 0.15s ease;
+			letter-spacing: 0.01em;
+		}
+
+		.submit-btn:hover { background: #1d4ed8; transform: translateY(-1px); }
+		.submit-btn:active { transform: translateY(0); }
+
+		.submit-btn svg { width: 16px; height: 16px; transition: transform 0.2s ease; }
+		.submit-btn:hover svg { transform: translateX(3px); }
+
+		.submit-note {
+			font-size: 0.82rem;
+			color: #334155;
+			line-height: 1.5;
+		}
+
+		.success-bar {
+			display: none;
+			margin: 0 40px 32px;
+			background: rgba(16,185,129,0.08);
+			border: 1px solid rgba(16,185,129,0.2);
+			border-radius: 10px;
+			padding: 14px 18px;
+			color: #34d399;
+			font-size: 0.9rem;
+			font-weight: 500;
+			display: flex; align-items: center; gap: 10px;
+			opacity: 0;
+			transition: opacity 0.3s ease;
+		}
+
+		.success-bar.show { opacity: 1; }
+		.success-bar svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+		/* hide by default without using display:none so transition works */
+		.success-bar { opacity: 0; pointer-events: none; }
+		.success-bar.show { opacity: 1; pointer-events: auto; }
+
+		/* ── ANIMATIONS ── */
+		.reveal {
+			opacity: 0;
+			transform: translateY(24px);
+			transition: opacity 0.7s ease, transform 0.7s ease;
+		}
+		.reveal.visible { opacity: 1; transform: translateY(0); }
+
+		/* ── RESPONSIVE ── */
+		@media (max-width: 900px) {
+			.contact-grid { grid-template-columns: 1fr; }
+			.info-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; }
+			.divider { grid-column: 1/-1; }
+			.social-section { grid-column: 1/-1; }
+		}
+
+		@media (max-width: 600px) {
+			.info-panel { grid-template-columns: 1fr; }
+			.form-card-top, .form-body, .form-footer { padding-left: 24px; padding-right: 24px; }
+			.form-row { grid-template-columns: 1fr; }
+			.success-bar { margin-left: 24px; margin-right: 24px; }
+		}
+	</style>
+</head>
+<body class="is-preload">
+<div id="page-wrapper">
+
+	<header id="header">
+		<h1><a href="index.html"><img src="images/causecircuit-logo.png" alt="CauseCircuit Logo" class="header-logo">CauseCircuit</a></h1>
+		<nav id="nav">
+			<ul class="links">
+				<li><a href="index.html">Home</a></li>
+				<li><a href="aboutus.html">About Us</a></li>
+				<li><a href="opportunities.html">Opportunities</a></li>
+				<li><a href="contact.html">Contact</a></li>
+			</ul>
+		</nav>
+		<a href="#mobile-menu" id="mobile-menu-toggle"><span class="icon fa-bars"></span></a>
+	</header>
+
+	<!-- Hero -->
+	<section class="page-hero">
+		<div class="hero-inner">
+			<div class="hero-eyebrow">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+				Contact us
+			</div>
+			<h1>Get in touch</h1>
+			<p>Have a question or want to get involved? Reach out — whether you're a student, a parent, or an organization looking to partner.</p>
+		</div>
+	</section>
+
+	<!-- Main -->
+	<section class="section-main">
+		<div class="container">
+			<div class="contact-grid">
+
+				<!-- Left info panel -->
+				<div class="info-panel reveal">
+					<p class="info-panel-label">Contact info</p>
+
+					<div class="info-items">
+						<div class="info-item">
+							<div class="info-item-icon">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+							</div>
+							<div class="info-item-body">
+								<div class="info-item-label">Email</div>
+								<div class="info-item-value">hello@causecircuit.ca</div>
+							</div>
+						</div>
+
+						<div class="info-item">
+							<div class="info-item-icon">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+							</div>
+							<div class="info-item-body">
+								<div class="info-item-label">Region</div>
+								<div class="info-item-value">Durham Region, Ontario</div>
+							</div>
+						</div>
+
+						<div class="info-item">
+							<div class="info-item-icon">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+							</div>
+							<div class="info-item-body">
+								<div class="info-item-label">Response time</div>
+								<div class="info-item-value">2–3 business days</div>
+							</div>
+						</div>
+
+						<a href="submit-org.html" class="info-item linked">
+							<div class="info-item-icon">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+							</div>
+							<div class="info-item-body">
+								<div class="info-item-label">Organizations</div>
+								<div class="info-item-value">Submit your org →</div>
+							</div>
+						</a>
+					</div>
+
+					<div class="divider"></div>
+
+					<div class="social-section">
+						<p class="social-label">Follow us</p>
+						<div class="social-row">
+							<!-- Instagram -->
+							<a href="#" class="social-icon" title="Instagram">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+							</a>
+							<!-- TikTok -->
+							<a href="#" class="social-icon" title="TikTok">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+							</a>
+							<!-- LinkedIn -->
+							<a href="#" class="social-icon" title="LinkedIn">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<!-- Form card -->
+				<div class="form-card reveal" style="transition-delay:0.15s">
+					<div class="form-card-top">
+						<h2>Send us a message</h2>
+						<p>We'll get back to you as soon as we can.</p>
+					</div>
+
+					<div class="form-body">
+						<div class="form-row">
+							<div class="field">
+								<label>First name<span class="req">*</span></label>
+								<input type="text" id="first-name" placeholder="Jane" autocomplete="given-name" />
+							</div>
+							<div class="field">
+								<label>Last name<span class="req">*</span></label>
+								<input type="text" id="last-name" placeholder="Doe" autocomplete="family-name" />
+							</div>
+						</div>
+
+						<div class="field">
+							<label>Email<span class="req">*</span></label>
+							<input type="email" id="email" placeholder="jane@example.com" autocomplete="email" />
+						</div>
+
+						<div class="field">
+							<label>I am a</label>
+							<select id="role">
+								<option value="" disabled selected>Select your role</option>
+								<option>High school student</option>
+								<option>Parent / guardian</option>
+								<option>Teacher or school staff</option>
+								<option>Non-profit / organization</option>
+								<option>Other</option>
+							</select>
+						</div>
+
+						<div class="field">
+							<label>Subject<span class="req">*</span></label>
+							<select id="subject">
+								<option value="" disabled selected>Choose a topic</option>
+								<option>Volunteering question</option>
+								<option>Volunteer hours / verification</option>
+								<option>Partnership inquiry</option>
+								<option>Suggest an organization</option>
+								<option>General feedback</option>
+								<option>Other</option>
+							</select>
+						</div>
+
+						<div class="field" style="margin-bottom:0">
+							<label>Message<span class="req">*</span></label>
+							<textarea id="message" placeholder="What's on your mind?"></textarea>
+						</div>
+					</div>
+
+					<div class="success-bar" id="success-bar">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+						Message sent — we'll be in touch within 2–3 business days.
+					</div>
+
+					<div class="form-footer">
+						<button class="submit-btn" id="submit-btn" onclick="handleSubmit()">
+							Send message
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+						</button>
+						<p class="submit-note">We're a student-run team — we appreciate your patience.</p>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</section>
+
+</div>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/jquery.scrollex.min.js"></script>
+<script src="assets/js/browser.min.js"></script>
+<script src="assets/js/breakpoints.min.js"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+	const observer = new IntersectionObserver(entries => {
+		entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+	}, { threshold: 0.1 });
+	document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+	function handleSubmit() {
+		const fn = document.getElementById('first-name').value.trim();
+		const email = document.getElementById('email').value.trim();
+		const msg = document.getElementById('message').value.trim();
+		if (!fn || !email || !msg) { alert('Please complete all required fields.'); return; }
+		const btn = document.getElementById('submit-btn');
+		btn.textContent = 'Sent';
+		btn.style.background = '#059669';
+		btn.disabled = true;
+		document.getElementById('success-bar').classList.add('show');
+	}
+</script>
+</body>
+</html>
