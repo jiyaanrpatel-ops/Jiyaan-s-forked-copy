@@ -141,115 +141,90 @@
 		.particle-4 { top: 25%; left: 70%; width: 10px; height: 10px; animation-delay: 1s; }
 		.particle-5 { top: 70%; left: 5%; width: 14px; height: 14px; animation-delay: 3s; }
 
-		/* Filter Section */
-		.filter-section {
-			background: rgba(15, 23, 42, 0.8);
-			backdrop-filter: blur(20px);
-			border-bottom: 1px solid rgba(148, 163, 184, 0.1);
-			padding: 30px 0;
-			position: sticky;
-			top: 85px;
-			z-index: 5000;
-			overflow: visible;
-		}
+		/* Filter Section Fixed & Expanded */
+        .filter-section {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            padding: 20px 0;
+            position: sticky;
+            top: 70px; /* Adjusted to match your true header layout height */
+            z-index: 5000;
+        }
 
-		.filter-container {
-			max-width: 1400px;
-			margin: 0 auto;
-			padding: 0 clamp(20px, 5vw, 50px);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 20px;
-			flex-wrap: wrap;
-			position: relative;
-		}
+        .filter-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 50px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
 
-		.filter-label {
-			color: #e2e8f0;
-			font-weight: 600;
-			font-size: 1rem;
-			margin-right: 10px;
-			white-space: nowrap;
-		}
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-		.filter-dropdown {
-			background: rgba(30, 41, 59, 0.95);
-			border: 1px solid rgba(148, 163, 184, 0.2);
-			border-radius: 12px;
-			color: #e2e8f0;
-			padding: 14px 20px;
-			font-size: 1rem;
-			font-weight: 500;
-			min-width: 220px;
-			max-width: none;
-			width: auto;
-			cursor: pointer;
-			transition: all 0.3s ease;
-			backdrop-filter: blur(15px);
-			appearance: none;
-			-webkit-appearance: none;
-			-moz-appearance: none;
-			background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23cbd5e1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
-			background-repeat: no-repeat;
-			background-position: right 12px center;
-			background-size: 16px;
-			padding-right: 45px;
-			position: relative;
-			z-index: 5001;
-			white-space: normal;
-			overflow-wrap: break-word;
-			display: block;
-		}
+        .filter-label {
+            color: #e2e8f0;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
 
-		.filter-dropdown option {
-			background: rgba(30, 41, 59, 0.98);
-			color: #e2e8f0;
-			padding: 12px 16px;
-			border: none;
-			font-size: 1rem;
-		}
+        .filter-dropdown {
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 10px;
+            color: #e2e8f0;
+            padding: 10px 40px 10px 16px; /* Optimized padding prevents text cutoff */
+            font-size: 0.95rem;
+            font-weight: 500;
+            line-height: 1.5; /* Ensures text height scales cleanly */
+            min-width: 180px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23cbd5e1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 14px;
+        }
 
-		.filter-dropdown:hover {
-			border-color: #60a5fa;
-			box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
-			background-color: rgba(30, 41, 59, 1);
-		}
+        .filter-dropdown option {
+            background: #1e293b;
+            color: #e2e8f0;
+        }
 
-		.filter-dropdown:focus {
-			outline: none;
-			border-color: #60a5fa;
-			box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
-			background-color: rgba(30, 41, 59, 1);
-		}
+        .filter-dropdown:hover, .filter-dropdown:focus {
+            outline: none;
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
+        }
 
-		.use-location-btn {
-			background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-			color: white;
-			border: none;
-			padding: 14px 24px;
-			border-radius: 12px;
-			font-size: 1rem;
-			font-weight: 600;
-			cursor: pointer;
-			transition: all 0.3s ease;
-			display: flex;
-			align-items: center;
-			gap: 8px;
-		}
-
-		.use-location-btn:hover {
-			transform: translateY(-2px);
-			box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
-		}
-
-		.location-status {
-			color: #60a5fa;
-			font-size: 0.9rem;
-			margin-top: 5px;
-			text-align: center;
-			min-height: 20px;
-		}
+        @media (max-width: 768px) {
+            .filter-container {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+            .filter-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+            .filter-dropdown {
+                width: 100%;
+            }
+        }
 
 		/* Main Content Section */
 		.content-section {
@@ -856,46 +831,34 @@
 			<div class="particle particle-5"></div>
 		</section>
 
-		<!-- Filter Section -->
 		<section class="filter-section">
-			<div class="filter-container">
-				<label class="filter-label" for="location-filter">Location:</label>
-				<select id="location-filter" class="filter-dropdown">
-					<option value="all">All Durham Region</option>
-					<option value="near-me">Near Me</option>
-					<option value="Oshawa">Oshawa</option>
-					<option value="Pickering">Pickering</option>
-					<option value="Ajax">Ajax</option>
-					<option value="Whitby">Whitby</option>
-					<option value="Clarington">Clarington</option>
-					<option value="Uxbridge">Uxbridge</option>
-					<option value="Scugog">Scugog</option>
-					<option value="Brock">Brock</option>
-				</select>
+            <div class="filter-container">
+                <div class="filter-group">
+                    <label class="filter-label" for="location-filter">Location:</label>
+                    <select id="location-filter" class="filter-dropdown">
+                        <option value="all">All Durham Region</option>
+                        <option value="Oshawa">Oshawa</option>
+                        <option value="Pickering">Pickering</option>
+                        <option value="Ajax">Ajax</option>
+                        <option value="Whitby">Whitby</option>
+                        <option value="Clarington">Clarington</option>
+                        <option value="Uxbridge">Uxbridge</option>
+                        <option value="Scugog">Scugog</option>
+                        <option value="Brock">Brock</option>
+                    </select>
+                </div>
 
-				<label class="filter-label" for="distance-filter">Distance:</label>
-				<select id="distance-filter" class="filter-dropdown">
-					<option value="any">Any Distance</option>
-					<option value="5">Within 5 km</option>
-					<option value="10">Within 10 km</option>
-					<option value="20">Within 20 km</option>
-					<option value="50">Within 50 km</option>
-				</select>
-
-				<label class="filter-label" for="commitment-filter">Time Commitment:</label>
-				<select id="commitment-filter" class="filter-dropdown">
-					<option value="all">All Types</option>
-					<option value="flexible">Flexible Schedule</option>
-					<option value="regular">Regular Hours</option>
-					<option value="event">Event-Based</option>
-				</select>
-
-				<button id="use-location-btn" class="use-location-btn">
-					<span>📍 Use My Location</span>
-				</button>
-			</div>
-			<div id="location-status" class="location-status"></div>
-		</section>
+                <div class="filter-group">
+                    <label class="filter-label" for="hours-filter">Commitment:</label>
+                    <select id="hours-filter" class="filter-dropdown">
+                        <option value="all">Any Hours</option>
+                        <option value="short">Short Term (1-3 hrs/wk)</option>
+                        <option value="medium">Medium Term (4-10 hrs/wk)</option>
+                        <option value="long">Long Term (10+ hrs/wk)</option>
+                    </select>
+                </div>
+            </div>
+        </section>
 
 		<!-- Main Content -->
 		<section class="content-section">
