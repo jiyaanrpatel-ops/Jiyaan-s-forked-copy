@@ -238,6 +238,91 @@
 			padding: 0 clamp(20px, 5vw, 50px);
 		}
 
+		/* Hours Tracker Section Styling */
+        .hours-tracker-box {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .tracker-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tracker-text {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .tracker-text h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #f8fafc;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .tracker-text p {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .tracker-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white !important;
+            padding: 14px 28px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+        }
+
+        .tracker-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        .tracker-btn span {
+            transition: transform 0.3s ease;
+        }
+
+        .tracker-btn:hover span {
+            transform: translateX(4px);
+        }
+
+        @media (max-width: 768px) {
+            .tracker-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .tracker-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Dynamic Grid System */
+        .opportunities-grid {
+            display: grid;
+            /* ... your existing grid code ... */
+		
 		/* Dynamic Grid System */
 		.opportunities-grid {
 			display: grid;
@@ -863,6 +948,18 @@
 		<!-- Main Content -->
 		<section class="content-section">
 			<div class="container">
+
+				<div class="hours-tracker-box">
+                    <div class="tracker-content">
+                        <div class="tracker-text">
+                            <h3>Host an Opportunity</h3>
+                            <p>Are you a local business or non-profit organization looking for passionate volunteers? Submit your upcoming events or positions through our registration form to feature them directly on CauseCircuit.</p>
+                        </div>
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLScPTGMjG8bAwur0PfyHHqny6MrITTyP1jQ2j-aAMlXtHO_wMQ/viewform?usp=header" target="_blank" class="tracker-btn">
+                            Post an Opportunity <span>→</span>
+                        </a>
+                    </div>
+                </div>
 				<!-- Opportunities Grid -->
 				<div class="opportunities-grid" id="opportunities-container">
 					<!-- Cards will be dynamically generated here -->
