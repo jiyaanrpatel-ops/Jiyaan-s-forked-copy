@@ -1319,6 +1319,65 @@
 			}
 		});
 	</script>
+	<script>
+        // Paste your published Google Sheets CSV URL inside these quotes
+        const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRINdpIfqYzmz7lNtKIkIuz75kA3wAOtAyE2lThkMty1Gpn7X9p3xIFLXV-hyX28PC-0LyFreFc1JXU/pub?gid=841646133&single=true&output=csv";
+
+        async function fetchDynamicOpportunities() {
+            const container = document.getElementById('opportunities-container');
+            
+            try {
+                const response = await fetch(SHEET_CSV_URL);
+                const csvText = await response.text();
+                
+                Papa.parse(csvText, {
+                    header: true, 
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        const data = results.data;
+                        container.innerHTML = ''; // Clear out placeholder boxes
+                        
+                        if (data.length === 0) {
+                            container.innerHTML = `<p style="color: #94a3b8; text-align: center;">No opportunities listed yet!</p>`;
+                            return;
+                        }
+
+                        // Loop through rows and build your horizontal cards automatically
+                        data.forEach(row => {
+                            const orgName = row['What is your Organization Name?'] || 'Anonymous Org';
+                            const title = row['What is your Opportunity Title?'] || 'Volunteer Helper';
+                            const description = row['What is the Description?'] || 'No description provided.';
+                            const location = row['Where is the Location/City?'] || 'Remote';
+                            const hours = row['What are the Hours Required to work?'] || 'Flexible';
+                            const image = row['Is there a Logo/Image URL for your organization?'] || 'images/causecircuit-logo.png'; 
+                            
+                            const card = document.createElement('div');
+                            card.className = 'opportunity-card';
+                            
+                            card.innerHTML = `
+                                <img src="${image}" alt="${orgName} Logo" onerror="this.src='images/causecircuit-logo.png'">
+                                <div class="card-content">
+                                    <div class="card-text">
+                                        <h3>${title}</h3>
+                                        <p><strong>${orgName}</strong> • ${location} • ${hours}</p>
+                                        <p style="margin-top: 6px; font-size: 0.85rem; color: #94a3b8;">${description}</p>
+                                    </div>
+                                    <button class="special">Learn More</button>
+                                </div>
+                            `;
+                            container.appendChild(card);
+                        });
+                    }
+                });
+            } catch (error) {
+                console.error("Error fetching sheet data:", error);
+                container.innerHTML = `<p style="color: #ef4444; text-align: center;">Failed to load live opportunities.</p>`;
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', fetchDynamicOpportunities);
+    </script>
+
 </body>
 
 </html>
