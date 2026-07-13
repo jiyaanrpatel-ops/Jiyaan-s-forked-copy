@@ -979,85 +979,12 @@
 	<script src="assets/js/main.js"></script>
 
 	<script>
-		// Enhanced Array of volunteer opportunities with more locations
-		const volunteerOpportunities = [
-			{
-				name: "Feed The Needy in Durham",
-				description: "Feed the Need in Durham is a non-profit organization dedicated to alleviating hunger in the Durham region through comprehensive food assistance programs.",
-				detailedDescription: "Feed the Need in Durham works tirelessly to provide nutritious meals and food assistance to individuals and families facing food insecurity in our community. They operate food banks, community kitchens, and mobile food delivery services to ensure no one goes hungry. Volunteers can help with food sorting, meal preparation, distribution, and administrative tasks. This organization has been serving the Durham region for over 15 years and has distributed millions of meals to those in need. Join us in making a tangible difference in combating food insecurity across our communities.",
-				imagePath: "images/organizationlogo/feedtheneedy.jpg",
-				website: " https://www.feedtheneedindurham.org ",
-				city: "Oshawa",
-				lat: 43.8946,
-				lng: -78.8528,
-				timeCommitment: "flexible",
-				hoursPerWeek: "1-5"
-			},
-			{
-				name: "Durham Youth Mentorship",
-				description: "Empowering young people through comprehensive mentorship programs and educational support initiatives that foster personal growth.",
-				detailedDescription: "Durham Youth Mentorship connects caring adults with young people aged 12-18 to provide guidance, support, and encouragement. Our mentors help youth develop life skills, academic success, and personal growth through one-on-one relationships and group activities. We focus on building confidence, fostering leadership skills, and helping young people reach their full potential. Volunteer opportunities include becoming a mentor, tutoring, organizing events, and supporting our summer programs. Our evidence-based approach has helped over 2,000 youth develop stronger self-esteem and academic performance.",
-				imagePath: "images/pic05.jpg",
-				website: "https://www.durhamyouthmentorship.ca ",
-				city: "Whitby",
-				lat: 43.9286,
-				lng: -78.9308,
-				timeCommitment: "regular",
-				hoursPerWeek: "2-4"
-			},
+		// 1. Core Data Array (Populated dynamically by Google Sheets)
+		let volunteerOpportunities = [];
 
-			{
-				name: "Community Garden Alliance",
-				description: "Growing fresh produce and fostering community connections through sustainable gardening practices and environmental education.",
-				detailedDescription: "The Community Garden Alliance maintains several community gardens throughout Durham, providing fresh produce to local food banks and teaching sustainable gardening practices. We believe in the power of growing food together to strengthen communities and promote environmental stewardship. Volunteers help with planting, weeding, harvesting, and maintaining garden spaces. We also offer educational workshops on composting, organic gardening, and nutrition for community members of all ages. Our gardens have produced over 50,000 pounds of fresh produce for local families in need.",
-				imagePath: "images/pic06.jpg",
-				website: "https://www.communitygardenalliance.org ",
-				city: "Ajax",
-				lat: 43.8358,
-				lng: -79.0206,
-				timeCommitment: "event",
-				hoursPerWeek: "5-10"
-			},
-			{
-				name: "Senior Support Services",
-				description: "Providing comprehensive companionship and assistance to elderly community members to enhance their quality of life and independence.",
-				detailedDescription: "Senior Support Services is dedicated to helping elderly residents maintain their independence and social connections. We provide friendly visits, transportation assistance, light housekeeping, and technology support to seniors in our community. Our volunteers make a meaningful difference by offering companionship, helping with errands, and ensuring seniors feel valued and connected. We also organize social events, exercise classes, and educational programs specifically designed for older adults. Our services reach over 1,500 seniors annually, helping them age with dignity in their own homes.",
-				imagePath: "images/pic07.jpg",
-				website: "https://www.seniorsupportdurham.ca ",
-				city: "Pickering",
-				lat: 43.8349,
-				lng: -79.0965,
-				timeCommitment: "regular",
-				hoursPerWeek: "2-6"
-			},
-			{
-				name: "Environmental Action Durham",
-				description: "Protecting and preserving our local environment through conservation initiatives, education, and community engagement programs.",
-				detailedDescription: "Environmental Action Durham is committed to protecting our local ecosystems and promoting sustainable practices throughout the region. We organize tree planting events, creek cleanups, and educational programs about environmental conservation. Our volunteers participate in habitat restoration projects, wildlife monitoring, and community education initiatives. We work closely with local schools, businesses, and government agencies to promote environmental awareness and action. Join us in preserving Durham's natural beauty for future generations.",
-				imagePath: "images/pic01.jpg",
-				website: "https://www.environmentalactiondurham.org ",
-				city: "Oshawa",
-				lat: 43.8946,
-				lng: -78.8528,
-				timeCommitment: "event",
-				hoursPerWeek: "1-3"
-			},
+		// Your published Google Sheets CSV URL
+		const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRINdpIfqYzmz7lNtKIkIuz75kA3wAOtAyE2lThkMty1Gpn7X9p3xIFLXV-hyX28PC-0LyFreFc1JXU/pub?gid=841646133&single=true&output=csv";
 
-			{
-				name: "Literacy Champions",
-				description: "Promoting literacy and education through tutoring and reading programs for all ages across Durham Region.",
-				detailedDescription: "Literacy Champions believes that reading is fundamental to personal and community development. We provide free tutoring services, reading programs, and literacy workshops for children, teens, and adults. Our volunteers work with students of all ages to improve reading skills, homework help, and test preparation. We also operate a book donation program and organize reading events at local libraries and community centers. Our programs have helped over 3,000 individuals improve their literacy skills.",
-				imagePath: "images/pic02.jpg",
-				website: "https://www.literacychampionsdurham.ca ",
-				city: "Markham",
-				lat: 43.8569,
-				lng: -79.3303,
-				timeCommitment: "regular",
-				hoursPerWeek: "3-5"
-			}
-		];
-
-		// Current user location
 		let currentUserLat = null;
 		let currentUserLng = null;
 
@@ -1068,15 +995,14 @@
 			const dLon = (lon2 - lon1) * Math.PI / 180;
 			const a = 
 				Math.sin(dLat/2) * Math.sin(dLat/2) +
-				Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-				Math.sin(dLon/2) * Math.sin(dLon/2);
+				Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
 			const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 			return R * c; // Distance in kilometers
 		}
 
 		// Function to get user's current location
 		function getUserLocation() {
-			const statusElement = document.getElementById('location-status');
+			const statusElement = document.getElementById('location-status') || { textContent: "" };
 			
 			if (!navigator.geolocation) {
 				statusElement.textContent = "Geolocation is not supported by your browser.";
@@ -1090,8 +1016,6 @@
 					currentUserLat = position.coords.latitude;
 					currentUserLng = position.coords.longitude;
 					statusElement.textContent = "Location acquired!";
-					
-					// Refresh the displayed opportunities after getting location
 					applyFilters();
 				},
 				(error) => {
@@ -1102,36 +1026,27 @@
 
 		// Function to filter opportunities based on all criteria
 		function filterOpportunities(location, distance, commitment) {
-			let filtered = volunteerOpportunities;
+			let filtered = [...volunteerOpportunities];
 			
-			// Apply location filter
 			if (location === 'all') {
-				// Keep all opportunities
+				// Keep all
 			} else if (location === 'near-me') {
 				if (currentUserLat !== null && currentUserLng !== null) {
-					// Calculate distances and filter by distance
 					filtered = filtered.map(opp => {
-						const dist = calculateDistance(currentUserLat, currentUserLng, opp.lat, opp.lng);
-						opp.distance = dist;
+						opp.distance = calculateDistance(currentUserLat, currentUserLng, opp.lat, opp.lng);
 						return opp;
 					}).filter(opp => {
-						if (distance === 'any') return true;
+						if (distance === 'all') return true;
 						const maxDist = parseInt(distance);
 						return opp.distance <= maxDist;
 					});
-				} else {
-					// If user hasn't provided location, show all
-					filtered = volunteerOpportunities;
 				}
 			} else {
-				// Specific city
-				filtered = filtered.filter(opp => opp.city === location);
+				filtered = filtered.filter(opp => opp.city.toLowerCase() === location.toLowerCase());
 				
-				// Apply distance filter if not 'any'
-				if (distance !== 'any' && currentUserLat !== null && currentUserLng !== null) {
+				if (distance !== 'all' && currentUserLat !== null && currentUserLng !== null) {
 					filtered = filtered.map(opp => {
-						const dist = calculateDistance(currentUserLat, currentUserLng, opp.lat, opp.lng);
-						opp.distance = dist;
+						opp.distance = calculateDistance(currentUserLat, currentUserLng, opp.lat, opp.lng);
 						return opp;
 					}).filter(opp => {
 						const maxDist = parseInt(distance);
@@ -1140,12 +1055,10 @@
 				}
 			}
 
-			// Apply time commitment filter
 			if (commitment !== 'all') {
 				filtered = filtered.filter(opp => opp.timeCommitment === commitment);
 			}
 			
-			// Sort by distance if "Near Me" is selected
 			if (location === 'near-me' && currentUserLat !== null && currentUserLng !== null) {
 				filtered.sort((a, b) => a.distance - b.distance);
 			}
@@ -1153,13 +1066,14 @@
 			return filtered;
 		}
 
-		// Function to generate opportunity cards
+		// Function to generate opportunity cards with structural animations
 		function generateOpportunityCards(opportunities = volunteerOpportunities) {
 			const container = document.getElementById('opportunities-container');
-			container.innerHTML = ''; // Clear existing content
+			if (!container) return;
+			container.innerHTML = ''; 
 			
 			if (opportunities.length === 0) {
-				container.innerHTML = '<div class="no-results">No volunteer opportunities match your current filters. Try adjusting your location, distance, or time commitment preferences.</div>';
+				container.innerHTML = '<div class="no-results">No volunteer opportunities match your current filters. Try adjusting your preferences.</div>';
 				return;
 			}
 			
@@ -1168,36 +1082,21 @@
 				card.className = 'opportunity-card';
 				card.style.transitionDelay = `${index * 0.1}s`;
 				
-				// Create commitment tags HTML
-				let commitmentTagHTML = '';
-				if (opportunity.timeCommitment) {
-					const tagClass = opportunity.timeCommitment;
-					const tagName = opportunity.timeCommitment.charAt(0).toUpperCase() + opportunity.timeCommitment.slice(1);
-					commitmentTagHTML = `<div class="commitment-tags">
-						<span class="commitment-tag ${tagClass}">${tagName}</span>
-					</div>`;
-				}
+				let commitmentTagHTML = opportunity.timeCommitment ? 
+					`<div class="commitment-tags"><span class="commitment-tag flexible">${opportunity.timeCommitment}</span></div>` : '';
 				
-				// Create hours per week HTML
-				let hoursHTML = '';
-				if (opportunity.hoursPerWeek) {
-					hoursHTML = `<div class="hours-per-week">${opportunity.hoursPerWeek} hours/week</div>`;
-				}
-
-				// Create distance tag if applicable
-				let distanceTagHTML = '';
-				if (opportunity.distance !== undefined) {
-					distanceTagHTML = `<div class="distance-tag">${Math.round(opportunity.distance)} km</div>`;
-				}
+				let hoursHTML = opportunity.hoursPerWeek ? `<div class="hours-per-week">${opportunity.hoursPerWeek}</div>` : '';
+				let distanceTagHTML = opportunity.distance !== undefined ? `<div class="distance-tag">${Math.round(opportunity.distance)} km</div>` : '';
 				
 				card.innerHTML = `
 					<div class="card-image-container">
-						<img src="${opportunity.imagePath}" alt="${opportunity.name}" />
+						<img src="${opportunity.imagePath}" alt="${opportunity.name}" onerror="this.src='images/causecircuit-logo.png'" />
 						<div class="location-tag">${opportunity.city}</div>
 						${distanceTagHTML}
 					</div>
 					<div class="card-content">
 						<h3>${opportunity.name}</h3>
+						<p style="margin-bottom: 8px; color: #60a5fa; font-weight: 600;">${opportunity.company}</p>
 						<p>${opportunity.description}</p>
 						${commitmentTagHTML}
 						${hoursHTML}
@@ -1207,7 +1106,7 @@
 				container.appendChild(card);
 			});
 
-			// Trigger animations
+			// Fix 1: Delays adding the class slightly to ensure CSS opacity transitions trigger smoothly
 			setTimeout(() => {
 				document.querySelectorAll('.opportunity-card').forEach(card => {
 					card.classList.add('animate');
@@ -1215,7 +1114,6 @@
 			}, 100);
 		}
 
-		// Function to apply all filters
 		function applyFilters() {
 			const locationFilter = document.getElementById('location-filter').value;
 			const distanceFilter = document.getElementById('distance-filter').value;
@@ -1225,83 +1123,99 @@
 			generateOpportunityCards(filteredOpportunities);
 		}
 
-		// Initialize page
+		// Function to fetch data from live Google Sheet via Papa Parse
+		async function fetchLiveSheetsData() {
+			try {
+				const response = await fetch(SHEET_CSV_URL);
+				const csvText = await response.text();
+				
+				Papa.parse(csvText, {
+					header: true,
+					skipEmptyLines: true,
+					complete: function(results) {
+						// Maps spreadsheet row column keys to structural JS layout objects
+						volunteerOpportunities = results.data.map(row => ({
+							name: row['What is your Opportunity Title?'] || 'Volunteer Helper',
+							company: row['What is your Organization Name?'] || 'Anonymous Org',
+							description: row['What is the Description?'] || 'No description provided.',
+							detailedDescription: row['What is the Description?'] || 'No description provided.',
+							imagePath: row['Is there a Logo/Image URL for your organization?'] || 'images/causecircuit-logo.png',
+							website: row['Website URL'] || '#', 
+							city: row['Where is the Location/City?'] || 'Oshawa',
+							lat: parseFloat(row['Latitude']) || 43.8946, 
+							lng: parseFloat(row['Longitude']) || -78.8528,
+							timeCommitment: "flexible",
+							hoursPerWeek: row['What are the Hours Required to work?'] || 'Flexible'
+						}));
+
+						// Generate our dynamic layout tiles instantly
+						generateOpportunityCards();
+					}
+				});
+			} catch (error) {
+				console.error("Error loading live data stream:", error);
+				const container = document.getElementById('opportunities-container');
+				if (container) {
+					container.innerHTML = `<p style="color: #ef4444; text-align: center;">Failed to load live opportunities.</p>`;
+				}
+			}
+		}
+
+		// Initialize application setup rules
 		document.addEventListener('DOMContentLoaded', function() {
-			// Generate initial cards
-			generateOpportunityCards();
+			// Trigger Papa Parse fetch routine immediately
+			fetchLiveSheetsData();
 
-			// Filter functionality
-			const locationFilter = document.getElementById('location-filter');
-			const distanceFilter = document.getElementById('distance-filter');
-			const commitmentFilter = document.getElementById('commitment-filter');
-			//line 1238
-			locationFilter.addEventListener('change', applyFilters);
-			distanceFilter.addEventListener('change', applyFilters);
-			commitmentFilter.addEventListener('change', applyFilters);
+			// Event filter handlers
+			document.getElementById('location-filter').addEventListener('change', applyFilters);
+			document.getElementById('distance-filter').addEventListener('change', applyFilters);
+			document.getElementById('commitment-filter').addEventListener('change', applyFilters);
+			document.getElementById('use-location-btn').addEventListener('click', getUserLocation);
 
-			// Use location button
-			const useLocationBtn = document.getElementById('use-location-btn');
-			useLocationBtn.addEventListener('click', getUserLocation);
-
-			// Popup functionality
 			const popup = document.getElementById('popup');
 			const popupContent = document.getElementById('popup-content');
 
-			// Event delegation for "Learn more" buttons
+			// Modal click delegation managers
 			document.addEventListener('click', function(event) {
 				if (event.target.classList.contains('special')) {
-					// Prevent the default behavior
 					event.preventDefault();
-
-					// Get the parent card element of the clicked button
 					const card = event.target.closest('.opportunity-card');
 					if (card) {
-						// Extract data from the card
-						const organizationName = card.querySelector('h3').textContent;
-						const organizationImage = card.querySelector('img').src;
-						const distanceElement = card.querySelector('.distance-tag');
-						const distanceText = distanceElement ? distanceElement.textContent : '';
-						
-						// Find the corresponding opportunity in our array for detailed description
-						const opportunity = volunteerOpportunities.find(opp => opp.name === organizationName);
-						const detailedDescription = opportunity ? opportunity.detailedDescription : card.querySelector('p').textContent;
-						const website = opportunity ? opportunity.website : '#';
-						const city = opportunity ? opportunity.city : 'Durham Region';
+						const titleText = card.querySelector('h3').textContent;
+						const opportunity = volunteerOpportunities.find(opp => opp.name === titleText);
 
-						// Populate the popup content dynamically (removed website/location info)
-						popupContent.innerHTML = `
-							<div class="popup-header">
-								<img src="${organizationImage}" alt="${organizationName}" />
-								<div class="popup-location-tag">${city}</div>
-								${distanceText ? `<div class="popup-distance-tag">${distanceText}</div>` : ''}
-							</div>
-							<h2 class="popup-title">${organizationName}</h2>
-							<div class="popup-scroll-content">
-								<div class="popup-body">
-									<p>${detailedDescription}</p>
+						if (opportunity) {
+							popupContent.innerHTML = `
+								<div class="popup-header">
+									<img src="${opportunity.imagePath}" alt="${opportunity.name}" />
+									<div class="popup-location-tag">${opportunity.city}</div>
 								</div>
-							</div>
-							<div class="popup-actions">
-								<a href="${website}" target="_blank" class="volunteer-btn">
-									<span>Volunteer Now</span>
-									<span>→</span>
-								</a>
-								<button class="popup-close">Close</button>
-							</div>
-						`;
-
-						// Show the popup
-						popup.classList.add('active');
-
-						// Add event listener for the close button inside the popup
-						popupContent.querySelector('.popup-close').addEventListener('click', () => {
-							popup.classList.remove('active');
-						});
+								<h2 class="popup-title">${opportunity.name}</h2>
+								<div class="popup-scroll-content">
+									<div class="popup-body">
+										<p style="color: #60a5fa; font-weight: 700; font-size: 1.1rem; margin-bottom: 12px;">Organization: ${opportunity.company}</p>
+										<p>${opportunity.detailedDescription}</p>
+									</div>
+								</div>
+								<div class="popup-actions">
+									<a href="${opportunity.website}" target="_blank" class="volunteer-btn">
+										<span>Volunteer Now</span>
+										<span>→</span>
+									</a>
+									<button class="popup-close">Close</button>
+								</div>
+							`;
+							
+							popup.classList.add('active');
+							
+							popupContent.querySelector('.popup-close').addEventListener('click', () => {
+								popup.classList.remove('active');
+							});
+						}
 					}
 				}
 			});
 
-			// Event listener to close the popup when clicking outside its content
 			popup.addEventListener('click', (event) => {
 				if (event.target === popup) {
 					popup.classList.remove('active');
@@ -1318,71 +1232,5 @@
 			}
 		});
 	</script>
-	<script>
-        // Paste your published Google Sheets CSV URL inside these quotes
-        const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRINdpIfqYzmz7lNtKIkIuz75kA3wAOtAyE2lThkMty1Gpn7X9p3xIFLXV-hyX28PC-0LyFreFc1JXU/pub?gid=841646133&single=true&output=csv";
-
-        async function fetchDynamicOpportunities() {
-            const container = document.getElementById('opportunities-container');
-
-			// SAFETY CHECK: If the box doesn't exist, stop right here!
-            if (!container) {
-                console.warn("Could not find the 'opportunities-container' element on this page.");
-                return;
-            }
-            
-            try {
-                const response = await fetch(SHEET_CSV_URL);
-                const csvText = await response.text();
-                
-                Papa.parse(csvText, {
-                    header: true, 
-                    skipEmptyLines: true,
-                    complete: function(results) {
-                        const data = results.data;
-                        container.innerHTML = ''; // Clear out placeholder boxes
-                        
-                        if (data.length === 0) {
-                            container.innerHTML = `<p style="color: #94a3b8; text-align: center;">No opportunities listed yet!</p>`;
-                            return;
-                        }
-
-                        // Loop through rows and build your horizontal cards automatically
-                        data.forEach(row => {
-                            const orgName = row['What is your Organization Name?'] || 'Anonymous Org';
-                            const title = row['What is your Opportunity Title?'] || 'Volunteer Helper';
-                            const description = row['What is the Description?'] || 'No description provided.';
-                            const location = row['Where is the Location/City?'] || 'Remote';
-                            const hours = row['What are the Hours Required to work?'] || 'Flexible';
-                            const image = row['Is there a Logo/Image URL for your organization?'] || 'images/causecircuit-logo.png'; 
-                            
-                            const card = document.createElement('div');
-                            card.className = 'opportunity-card';
-                            
-                            card.innerHTML = `
-                                <img src="${image}" alt="${orgName} Logo" onerror="this.src='images/causecircuit-logo.png'">
-                                <div class="card-content">
-                                    <div class="card-text">
-                                        <h3>${title}</h3>
-                                        <p><strong>${orgName}</strong> • ${location} • ${hours}</p>
-                                        <p style="margin-top: 6px; font-size: 0.85rem; color: #94a3b8;">${description}</p>
-                                    </div>
-                                    <button class="special">Learn More</button>
-                                </div>
-                            `;
-                            container.appendChild(card);
-                        });
-                    }
-                });
-            } catch (error) {
-                console.error("Error fetching sheet data:", error);
-                container.innerHTML = `<p style="color: #ef4444; text-align: center;">Failed to load live opportunities.</p>`;
-            }
-        }
-
-        window.addEventListener('DOMContentLoaded', fetchDynamicOpportunities);
-    </script>
-
 </body>
-
 </html>
