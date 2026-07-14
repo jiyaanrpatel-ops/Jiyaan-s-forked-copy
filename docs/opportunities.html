@@ -589,7 +589,33 @@
 	</div>
 
 	<script>
-		// Core Data Array (Populated dynamically by Google Sheets)
+		// 1. Exemplar (Sample) Tiles - These are the only default "samples" that will show
+		const exemplarOpportunities = [
+			{
+				name: "Youth Technology Mentor",
+				company: "Durham Tech Collective",
+				description: "Help teach local elementary students basic coding skills and digital literacy in a fun, after-school environment.",
+				detailedDescription: "We are looking for enthusiastic mentors to assist with our weekly after-school STEM clubs. No advanced programming knowledge is required—just a passion for technology and a willingness to help kids learn! All workshop materials and training will be provided.",
+				imagePath: "images/causecircuit-logo.png",
+				website: "https://example.com/durham-tech-collective", 
+				city: "Oshawa",
+				timeCommitment: "short",
+				hoursPerWeek: "2 hours/week"
+			},
+			{
+				name: "Community Food Organizer",
+				company: "Feed Durham Region",
+				description: "Assist with sorting, packing, and distributing fresh produce and non-perishables to local families in need.",
+				detailedDescription: "Join our dedicated team at the main warehouse. Volunteers will help categorize incoming donations, pack grocery hampers, and organize distribution lanes. This is a great hands-on opportunity to make a direct impact in your community.",
+				imagePath: "images/causecircuit-logo.png",
+				website: "https://example.com/feed-durham", 
+				city: "Whitby",
+				timeCommitment: "medium",
+				hoursPerWeek: "5 hours/week"
+			}
+		];
+
+		// Core Data Array (Will hold both Live and Exemplar data)
 		let volunteerOpportunities = [];
 
 		// Published Google Sheets CSV URL
@@ -599,12 +625,12 @@
 		function filterOpportunities(location, commitment) {
 			let filtered = [...volunteerOpportunities];
 
-			// 1. Filter by Location Name
+			// Filter by Location
 			if (location !== 'all') {
 				filtered = filtered.filter(opp => opp.city.toLowerCase() === location.toLowerCase());
 			}
 
-			// 2. Filter by Time Commitment Categories
+			// Filter by Time Commitment
 			if (commitment !== 'all') {
 				filtered = filtered.filter(opp => opp.timeCommitment === commitment);
 			}
@@ -633,21 +659,17 @@
 				
 				let hoursHTML = opportunity.hoursPerWeek ? `<div class="hours-per-week">Hours Required: ${opportunity.hoursPerWeek}</div>` : '';
 				
-				// 1. Clean and format the website URL
+				// Clean and format the website URL
 				let targetUrl = opportunity.website ? opportunity.website.trim() : '#';
-				
-				// Automatically prepends 'https://' if the user forgot to type it in the form
 				if (targetUrl !== '#' && targetUrl !== '' && !/^https?:\/\//i.test(targetUrl)) {
 					targetUrl = 'https://' + targetUrl;
 				}
 
-				// 2. Decide if the button should be a direct link or trigger the details popup
+				// Decide if button is direct link or popup modal trigger
 				let buttonHTML = '';
 				if (targetUrl && targetUrl !== '#') {
-					// Direct external link (opens in a new tab)
 					buttonHTML = `<a href="${targetUrl}" target="_blank" class="card-btn" style="text-decoration: none; display: inline-flex; align-items: center;">Learn More</a>`;
 				} else {
-					// Fallback popup trigger (retains the "special" class for the modal event listener)
 					buttonHTML = `<button class="card-btn special">Learn More</button>`;
 				}
 				
@@ -671,136 +693,4 @@
 			// CSS transition animation helper
 			setTimeout(() => {
 				document.querySelectorAll('.opportunity-card').forEach(card => {
-					card.classList.add('animate');
-				});
-			}, 50);
-		}
-
-		// Filter controller trigger
-		function applyFilters() {
-			const locationFilter = document.getElementById('location-filter').value;
-			const commitmentFilter = document.getElementById('commitment-filter').value;
-			
-			const filteredOpportunities = filterOpportunities(locationFilter, commitmentFilter);
-			generateOpportunityCards(filteredOpportunities);
-		}
-
-		// Papa Parse Dynamic Fetch Route with Cache-Buster built right in
-		async function fetchLiveSheetsData() {
-			try {
-				const cacheBuster = `&t=${new Date().getTime()}`;
-				const response = await fetch(SHEET_CSV_URL + cacheBuster);
-				const csvText = await response.text();
-				
-				Papa.parse(csvText, {
-					header: true,
-					skipEmptyLines: true,
-					complete: function(results) {
-						// 1. Filter out completely empty or placeholder rows first
-						const validRows = results.data.filter(row => {
-							const title = row['What is your Opportunity Title?'] ? row['What is your Opportunity Title?'].trim() : '';
-							const org = row['What is your Organization Name?'] ? row['What is your Organization Name?'].trim() : '';
-							
-							// Only keep the row if it actually has a Title OR an Organization Name
-							return title !== '' || org !== '';
-						});
-
-						// 2. Map only the valid, filled-out rows to tiles
-						volunteerOpportunities = validRows.map(row => {
-							const rawHours = row['What are the Hours Required to work?'] || '';
-							const hoursNum = parseInt(rawHours, 10);
-							
-							let commitment = 'flexible';
-							if (!isNaN(hoursNum)) {
-								if (hoursNum <= 3) commitment = 'short';
-								else if (hoursNum <= 10) commitment = 'medium';
-								else commitment = 'long';
-							}
-
-							return {
-								name: row['What is your Opportunity Title?'] || 'Volunteer Helper',
-								company: row['What is your Organization Name?'] || 'Anonymous Org',
-								description: row['What is the Description?'] || 'No description provided.',
-								detailedDescription: row['What is the Description?'] || 'No description provided.',
-								imagePath: row['Is there a Logo/Image URL for your organization?'] || 'images/causecircuit-logo.png',
-								website: row['Website URL'] || '#', 
-								city: row['Where is the Location/City?'] || 'Oshawa',
-								timeCommitment: commitment,
-								hoursPerWeek: row['What are the Hours Required to work?'] || 'Flexible'
-							};
-						});
-
-						// Display fully initialized cards immediately
-						generateOpportunityCards();
-					}
-				});
-			} catch (error) {
-				console.error("Error loading live data stream:", error);
-				const container = document.getElementById('opportunities-container');
-				if (container) {
-					container.innerHTML = `<p style="color: #ef4444; text-align: center;">Failed to load live opportunities.</p>`;
-				}
-			}
-		}
-
-		// DOM Initialization listeners
-		document.addEventListener('DOMContentLoaded', function() {
-			fetchLiveSheetsData();
-
-			// UI Event Listeners
-			document.getElementById('location-filter').addEventListener('change', applyFilters);
-			document.getElementById('commitment-filter').addEventListener('change', applyFilters);
-
-			const popup = document.getElementById('popup');
-			const popupContent = document.getElementById('popup-content');
-
-			// Modal delegated layout click event handlers
-			document.addEventListener('click', function(event) {
-				if (event.target.classList.contains('special')) {
-					event.preventDefault();
-					const card = event.target.closest('.opportunity-card');
-					if (card) {
-						const titleText = card.querySelector('h3').textContent;
-						const opportunity = volunteerOpportunities.find(opp => opp.name === titleText);
-
-						if (opportunity) {
-							popupContent.innerHTML = `
-								<div class="popup-header">
-									<img src="${opportunity.imagePath}" alt="${opportunity.name}" onerror="this.src='images/causecircuit-logo.png'" />
-									<div class="popup-location-tag">${opportunity.city}</div>
-								</div>
-								<h2 class="popup-title">${opportunity.name}</h2>
-								<div class="popup-scroll-content">
-									<div class="popup-body">
-										<p style="color: #60a5fa; font-weight: 700; font-size: 1.1rem; margin-bottom: 12px;">Organization: ${opportunity.company}</p>
-										<p>${opportunity.detailedDescription}</p>
-									</div>
-								</div>
-								<div class="popup-actions">
-									<a href="${opportunity.website}" target="_blank" class="volunteer-btn">
-										<span>Volunteer Now</span>
-										<span>→</span>
-									</a>
-									<button class="popup-close">Close</button>
-								</div>
-							`;
-							
-							popup.classList.add('active');
-							
-							popupContent.querySelector('.popup-close').addEventListener('click', () => {
-								popup.classList.remove('active');
-							});
-						}
-					}
-				}
-			});
-
-			popup.addEventListener('click', (event) => {
-				if (event.target === popup) {
-					popup.classList.remove('active');
-				}
-			});
-		});
-	</script>
-</body>
-</html>
+					card.classList
