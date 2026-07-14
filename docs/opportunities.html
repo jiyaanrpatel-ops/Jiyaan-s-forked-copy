@@ -693,4 +693,140 @@
 			// CSS transition animation helper
 			setTimeout(() => {
 				document.querySelectorAll('.opportunity-card').forEach(card => {
-					card.classList
+					card.classList.add('animate');
+				});
+			}, 50);
+		}
+
+		// Filter controller trigger
+		function applyFilters() {
+			const locationFilter = document.getElementById('location-filter').value;
+			const commitmentFilter = document.getElementById('commitment-filter').value;
+			
+			const filteredOpportunities = filterOpportunities(locationFilter, commitmentFilter);
+			generateOpportunityCards(filteredOpportunities);
+		}
+
+		// Papa Parse Dynamic Fetch Route with Cache-Buster built right in
+		async function fetchLiveSheetsData() {
+			try {
+				const cacheBuster = `&t=${new Date().getTime()}`;
+				const response = await fetch(SHEET_CSV_URL + cacheBuster);
+				const csvText = await response.text();
+				
+				Papa.parse(csvText, {
+					header: true,
+					skipEmptyLines: true,
+					complete: function(results) {
+						// 1. STRICT FILTER: Throw out rows that don't have a real title or org name
+						const validRows = results.data.filter(row => {
+							const title = row['What is your Opportunity Title?'] ? row['What is your Opportunity Title?'].trim() : '';
+							const org = row['What is your Organization Name?'] ? row['What is your Organization Name?'].trim() : '';
+							
+							// If either field is missing, or contains placeholder-like default data, reject it
+							if (title === '' || org === '') return false;
+							if (title.toLowerCase() === 'volunteer helper' || org.toLowerCase() === 'anonymous org') return false;
+							
+							return true;
+						});
+
+						// 2. Map only the clean, valid rows
+						const liveOpportunities = validRows.map(row => {
+							const rawHours = row['What are the Hours Required to work?'] || '';
+							const hoursNum = parseInt(rawHours, 10);
+							
+							let commitment = 'flexible';
+							if (!isNaN(hoursNum)) {
+								if (hoursNum <= 3) commitment = 'short';
+								else if (hoursNum <= 10) commitment = 'medium';
+								else commitment = 'long';
+							}
+
+							return {
+								name: row['What is your Opportunity Title?'].trim(),
+								company: row['What is your Organization Name?'].trim(),
+								description: row['What is the Description?'] || 'No description provided.',
+								detailedDescription: row['What is the Description?'] || 'No description provided.',
+								imagePath: row['Is there a Logo/Image URL for your organization?'] || 'images/causecircuit-logo.png',
+								website: row['Website URL'] || '#', 
+								city: row['Where is the Location/City?'] || 'Oshawa',
+								timeCommitment: commitment,
+								hoursPerWeek: row['What are the Hours Required to work?'] || 'Flexible'
+							};
+						});
+
+						// 3. Combine your clean exemplars with actual live submissions
+						volunteerOpportunities = [...exemplarOpportunities, ...liveOpportunities];
+
+						generateOpportunityCards();
+					}
+				});
+			} catch (error) {
+				console.error("Error loading live data stream:", error);
+				// If sheet loading completely fails, still show the high-quality exemplars
+				volunteerOpportunities = [...exemplarOpportunities];
+				generateOpportunityCards();
+			}
+		}
+
+		// DOM Initialization listeners
+		document.addEventListener('DOMContentLoaded', function() {
+			fetchLiveSheetsData();
+
+			// UI Event Listeners
+			document.getElementById('location-filter').addEventListener('change', applyFilters);
+			document.getElementById('commitment-filter').addEventListener('change', applyFilters);
+
+			const popup = document.getElementById('popup');
+			const popupContent = document.getElementById('popup-content');
+
+			// Modal delegated layout click event handlers
+			document.addEventListener('click', function(event) {
+				if (event.target.classList.contains('special')) {
+					event.preventDefault();
+					const card = event.target.closest('.opportunity-card');
+					if (card) {
+						const titleText = card.querySelector('h3').textContent;
+						const opportunity = volunteerOpportunities.find(opp => opp.name === titleText);
+
+						if (opportunity) {
+							popupContent.innerHTML = `
+								<div class="popup-header">
+									<img src="${opportunity.imagePath}" alt="${opportunity.name}" onerror="this.src='images/causecircuit-logo.png'" />
+									<div class="popup-location-tag">${opportunity.city}</div>
+								</div>
+								<h2 class="popup-title">${opportunity.name}</h2>
+								<div class="popup-scroll-content">
+									<div class="popup-body">
+										<p style="color: #60a5fa; font-weight: 700; font-size: 1.1rem; margin-bottom: 12px;">Organization: ${opportunity.company}</p>
+										<p>${opportunity.detailedDescription}</p>
+									</div>
+								</div>
+								<div class="popup-actions">
+									<a href="${opportunity.website}" target="_blank" class="volunteer-btn">
+										<span>Volunteer Now</span>
+										<span>→</span>
+									</a>
+									<button class="popup-close">Close</button>
+								</div>
+							`;
+							
+							popup.classList.add('active');
+							
+							popupContent.querySelector('.popup-close').addEventListener('click', () => {
+								popup.classList.remove('active');
+							});
+						}
+					}
+				}
+			});
+
+			popup.addEventListener('click', (event) => {
+				if (event.target === popup) {
+					popup.classList.remove('active');
+				}
+			});
+		});
+	</script>
+</body>
+</html>
