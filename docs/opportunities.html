@@ -18,6 +18,34 @@
 			box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
 		}
 
+		/* Blue Use Location Button Styling */
+		.use-location-btn {
+			background: #2563eb;
+			color: white;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 8px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			white-space: nowrap;
+			height: 42px; /* Aligns with the dropdown heights */
+		}
+
+		.use-location-btn:hover {
+			background: #1d4ed8;
+			transform: translateY(-1px);
+			box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+		}
+
+		.use-location-btn:active {
+			transform: translateY(1px);
+		}
+
 		@media (max-width: 768px) {
 			.filter-container {
 				flex-direction: column;
@@ -29,8 +57,9 @@
 				align-items: flex-start;
 				gap: 6px;
 			}
-			.filter-dropdown {
+			.filter-dropdown, .use-location-btn {
 				width: 100%;
+				justify-content: center;
 			}
 		}
 
@@ -539,7 +568,7 @@
 		</header>
 
 		<section class="filter-section" style="margin-top: 40px;">
-			<div class="filter-container" style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; background: rgba(30, 41, 59, 0.5); padding: 20px; border-radius: 16px; margin: 0 auto; max-width: 1300px;">
+			<div class="filter-container" style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; background: rgba(30, 41, 59, 0.5); padding: 20px; border-radius: 16px; margin: 0 auto; max-width: 1300px; align-items: center;">
 				
 				<div class="filter-group" style="display: flex; align-items: center; gap: 10px;">
 					<label class="filter-label" for="location-filter" style="color: white; font-weight: 600;">Location:</label>
@@ -566,6 +595,8 @@
 						<option value="50">Within 50 km</option>
 					</select>
 				</div>
+
+				<button id="use-location" class="use-location-btn">📍 Use Location</button>
 
 				<div class="filter-group" style="display: flex; align-items: center; gap: 10px;">
 					<label class="filter-label" for="commitment-filter" style="color: white; font-weight: 600;">Commitment:</label>
@@ -763,6 +794,11 @@
 			document.getElementById('location-filter').addEventListener('change', applyFilters);
 			document.getElementById('commitment-filter').addEventListener('change', applyFilters);
 			document.getElementById('distance-filter').addEventListener('change', applyFilters);
+
+			// Placeholder trigger for Use Location button click
+			document.getElementById('use-location').addEventListener('click', function() {
+				console.log("Use Location button clicked. Hook GPS integration here!");
+			});
 
 			const popup = document.getElementById('popup');
 			const popupContent = document.getElementById('popup-content');
