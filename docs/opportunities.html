@@ -718,23 +718,33 @@
 					header: true,
 					skipEmptyLines: true,
 					complete: function(results) {
-						// 1. STRICT FILTER: Throw out rows that don't have a real title or org name
-						const validRows = results.data.filter(row => {
-							const title = row['What is your Opportunity Title?'] ? row['What is your Opportunity Title?'].trim() : '';
-							const org = row['What is your Organization Name?'] ? row['What is your Organization Name?'].trim() : '';
-							
-							// If either field is missing, or contains placeholder-like default data, reject it
-							if (title === '' || org === '') return false;
-							if (title.toLowerCase() === 'volunteer helper' || org.toLowerCase() === 'anonymous org') return false;
-							
-							return true;
-						});
+						// Log the headers to the console so you can see exactly what PapaParse sees!
+						if (results.data.length > 0) {
+							console.log("Detected Sheet Headers:", Object.keys(results.data[0]));
+						}
 
-						// 2. Map only the clean, valid rows
-						const liveOpportunities = validRows.map(row => {
-							const rawHours = row['What are the Hours Required to work?'] || '';
-							const hoursNum = parseInt(rawHours, 10);
+						// 1. Map columns dynamically by searching for keywords in the headers
+						const liveOpportunities = results.data.map(row => {
+							const keys = Object.keys(row);
 							
+							// Find columns that contain key words dynamically
+							const titleKey = keys.find(k => k.toLowerCase().includes('title')) || '';
+							const orgKey = keys.find(k => k.toLowerCase().includes('organization') || k.toLowerCase().includes('company')) || '';
+							const descKey = keys.find(k => k.toLowerCase().includes('description')) || '';
+							const logoKey = keys.find(k => k.toLowerCase().includes('logo') || k.toLowerCase().includes('image')) || '';
+							const webKey = keys.find(k => k.toLowerCase().includes('website') || k.toLowerCase().includes('url')) || '';
+							const cityKey = keys.find(k => k.toLowerCase().includes('city') || k.toLowerCase().includes('location')) || '';
+							const hoursKey = keys.find(k => k.toLowerCase().includes('hours')) || '';
+
+							const title = row[titleKey] ? row[titleKey].trim() : '';
+							const org = row[orgKey] ? row[orgKey].trim() : '';
+
+							// If there's no title and no organization, ignore this row entirely
+							if (!title && !org) return null;
+
+							// Calculate commitment based on number of hours parsed
+							const rawHours = row[hoursKey] || '';
+							const hoursNum = parseInt(rawHours, 10);
 							let commitment = 'flexible';
 							if (!isNaN(hoursNum)) {
 								if (hoursNum <= 3) commitment = 'short';
@@ -743,20 +753,25 @@
 							}
 
 							return {
-								name: row['What is your Opportunity Title?'].trim(),
-								company: row['What is your Organization Name?'].trim(),
-								description: row['What is the Description?'] || 'No description provided.',
-								detailedDescription: row['What is the Description?'] || 'No description provided.',
-								imagePath: row['Is there a Logo/Image URL for your organization?'] || 'images/causecircuit-logo.png',
-								website: row['Website URL'] || '#', 
-								city: row['Where is the Location/City?'] || 'Oshawa',
+								name: title || 'Volunteer Helper',
+								company: org || 'Anonymous Org',
+								description: row[descKey] || 'No description provided.',
+								detailedDescription: row[descKey] || 'No description provided.',
+								imagePath: row[logoKey] || 'images/causecircuit-logo.png',
+								website: row[webKey] || '#', 
+								city: row[cityKey] || 'Oshawa',
 								timeCommitment: commitment,
-								hoursPerWeek: row['What are the Hours Required to work?'] || 'Flexible'
+								hoursPerWeek: rawHours || 'Flexible'
 							};
+						}).filter(item => item !== null); // Filter out any empty items entirely
+
+						// 2. Filter out explicit fallback text templates from populating the grid
+						const cleanLiveOpportunities = liveOpportunities.filter(opp => {
+							return opp.name.toLowerCase() !== 'volunteer helper' && opp.company.toLowerCase() !== 'anonymous org';
 						});
 
 						// 3. Combine your clean exemplars with actual live submissions
-						volunteerOpportunities = [...exemplarOpportunities, ...liveOpportunities];
+						volunteerOpportunities = [...exemplarOpportunities, ...cleanLiveOpportunities];
 
 						generateOpportunityCards();
 					}
