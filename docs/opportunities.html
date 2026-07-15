@@ -589,7 +589,7 @@
 	</div>
 
 	<script>
-		// 1. Exemplar (Sample) Tiles - These are the only default "samples" that will show
+		// 1. Exemplar (Sample) Tiles - Showcase mockups
 		const exemplarOpportunities = [
 			{
 				name: "Youth Technology Mentor",
@@ -659,13 +659,13 @@
 				
 				let hoursHTML = opportunity.hoursPerWeek ? `<div class="hours-per-week">Hours Required: ${opportunity.hoursPerWeek}</div>` : '';
 				
-				// Clean and format the website URL
+				// Clean and format the website URL dynamically
 				let targetUrl = opportunity.website ? opportunity.website.trim() : '#';
 				if (targetUrl !== '#' && targetUrl !== '' && !/^https?:\/\//i.test(targetUrl)) {
 					targetUrl = 'https://' + targetUrl;
 				}
 
-				// Decide if button is direct link or popup modal trigger
+				// If there is an external application/info link, map it directly onto the button click path
 				let buttonHTML = '';
 				if (targetUrl && targetUrl !== '#') {
 					buttonHTML = `<a href="${targetUrl}" target="_blank" class="card-btn" style="text-decoration: none; display: inline-flex; align-items: center;">Learn More</a>`;
@@ -707,7 +707,7 @@
 			generateOpportunityCards(filteredOpportunities);
 		}
 
-		// Papa Parse Dynamic Fetch Route with Cache-Buster built right in
+		// Papa Parse Dynamic Fetch Route with Strict Position Mapping
 		async function fetchLiveSheetsData() {
 			try {
 				const cacheBuster = `&t=${new Date().getTime()}`;
@@ -715,35 +715,39 @@
 				const csvText = await response.text();
 				
 				Papa.parse(csvText, {
-					header: true,
+					header: false, // Turned off headers to read columns strictly by position (0, 1, 2...)
 					skipEmptyLines: true,
 					complete: function(results) {
-						// Log the headers to the console so you can see exactly what PapaParse sees!
-						if (results.data.length > 0) {
-							console.log("Detected Sheet Headers:", Object.keys(results.data[0]));
-						}
+						console.log("Raw Spreadsheet Rows:", results.data);
 
-						// 1. Map columns dynamically by searching for keywords in the headers
-						const liveOpportunities = results.data.map(row => {
-							const keys = Object.keys(row);
-							
-							// Find columns that contain key words dynamically
-							const titleKey = keys.find(k => k.toLowerCase().includes('title')) || '';
-							const orgKey = keys.find(k => k.toLowerCase().includes('organization') || k.toLowerCase().includes('company')) || '';
-							const descKey = keys.find(k => k.toLowerCase().includes('description')) || '';
-							const logoKey = keys.find(k => k.toLowerCase().includes('logo') || k.toLowerCase().includes('image')) || '';
-							const webKey = keys.find(k => k.toLowerCase().includes('website') || k.toLowerCase().includes('url')) || '';
-							const cityKey = keys.find(k => k.toLowerCase().includes('city') || k.toLowerCase().includes('location')) || '';
-							const hoursKey = keys.find(k => k.toLowerCase().includes('hours')) || '';
+						// Skip the first row since it contains the questions text
+						const dataRows = results.data.slice(1);
 
-							const title = row[titleKey] ? row[titleKey].trim() : '';
-							const org = row[orgKey] ? row[orgKey].trim() : '';
+						const liveOpportunities = dataRows.map(row => {
+							// Check that the row contains baseline layout elements
+							if (!row || row.length < 3) return null;
 
-							// If there's no title and no organization, ignore this row entirely
-							if (!title && !org) return null;
+							// Mapping strictly by column sequence left-to-right:
+							// row[0] = Timestamp (Column A)
+							// row[1] = Opportunity Title (Column B)
+							// row[2] = Organization Name (Column C)
+							// row[3] = Description (Column D)
+							// row[4] = Website Link (Column E)
+							// row[5] = City/Location (Column F)
+							// row[6] = Hours Required (Column G)
+							const title = row[1] ? row[1].trim() : '';
+							const org = row[2] ? row[2].trim() : '';
+							const desc = row[3] ? row[3].trim() : 'No description provided.';
+							const webLink = row[4] ? row[4].trim() : '#';
+							const city = row[5] ? row[5].trim() : 'Oshawa';
+							const rawHours = row[6] ? row[6].trim() : '';
 
-							// Calculate commitment based on number of hours parsed
-							const rawHours = row[hoursKey] || '';
+							// STRICT REJECTION: Drop line if core identifiers are blank
+							if (title === '' || org === '') {
+								return null;
+							}
+
+							// Calculate commitments based on row data
 							const hoursNum = parseInt(rawHours, 10);
 							let commitment = 'flexible';
 							if (!isNaN(hoursNum)) {
@@ -753,32 +757,26 @@
 							}
 
 							return {
-								name: title || 'Volunteer Helper',
-								company: org || 'Anonymous Org',
-								description: row[descKey] || 'No description provided.',
-								detailedDescription: row[descKey] || 'No description provided.',
-								imagePath: row[logoKey] || 'images/causecircuit-logo.png',
-								website: row[webKey] || '#', 
-								city: row[cityKey] || 'Oshawa',
+								name: title,
+								company: org,
+								description: desc,
+								detailedDescription: desc,
+								imagePath: 'images/causecircuit-logo.png',
+								website: webLink, 
+								city: city,
 								timeCommitment: commitment,
 								hoursPerWeek: rawHours || 'Flexible'
 							};
-						}).filter(item => item !== null); // Filter out any empty items entirely
+						}).filter(item => item !== null); // Drop empty entries completely
 
-						// 2. Filter out explicit fallback text templates from populating the grid
-						const cleanLiveOpportunities = liveOpportunities.filter(opp => {
-							return opp.name.toLowerCase() !== 'volunteer helper' && opp.company.toLowerCase() !== 'anonymous org';
-						});
-
-						// 3. Combine your clean exemplars with actual live submissions
-						volunteerOpportunities = [...exemplarOpportunities, ...cleanLiveOpportunities];
+						// Mix static default display showcases with live verified listings
+						volunteerOpportunities = [...exemplarOpportunities, ...liveOpportunities];
 
 						generateOpportunityCards();
 					}
 				});
 			} catch (error) {
 				console.error("Error loading live data stream:", error);
-				// If sheet loading completely fails, still show the high-quality exemplars
 				volunteerOpportunities = [...exemplarOpportunities];
 				generateOpportunityCards();
 			}
@@ -795,7 +793,7 @@
 			const popup = document.getElementById('popup');
 			const popupContent = document.getElementById('popup-content');
 
-			// Modal delegated layout click event handlers
+			// Modal fallback delegated trigger layout click handler
 			document.addEventListener('click', function(event) {
 				if (event.target.classList.contains('special')) {
 					event.preventDefault();
@@ -805,6 +803,11 @@
 						const opportunity = volunteerOpportunities.find(opp => opp.name === titleText);
 
 						if (opportunity) {
+							let targetUrl = opportunity.website ? opportunity.website.trim() : '#';
+							if (targetUrl !== '#' && targetUrl !== '' && !/^https?:\/\//i.test(targetUrl)) {
+								targetUrl = 'https://' + targetUrl;
+							}
+
 							popupContent.innerHTML = `
 								<div class="popup-header">
 									<img src="${opportunity.imagePath}" alt="${opportunity.name}" onerror="this.src='images/causecircuit-logo.png'" />
@@ -818,7 +821,7 @@
 									</div>
 								</div>
 								<div class="popup-actions">
-									<a href="${opportunity.website}" target="_blank" class="volunteer-btn">
+									<a href="${targetUrl}" target="_blank" class="volunteer-btn">
 										<span>Volunteer Now</span>
 										<span>→</span>
 									</a>
