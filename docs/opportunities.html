@@ -557,6 +557,17 @@
 				</div>
 
 				<div class="filter-group" style="display: flex; align-items: center; gap: 10px;">
+					<label class="filter-label" for="distance-filter" style="color: white; font-weight: 600;">Distance:</label>
+					<select id="distance-filter" class="filter-dropdown" style="background: #0f172a; color: white; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);">
+						<option value="all">Any Distance</option>
+						<option value="5">Within 5 km</option>
+						<option value="10">Within 10 km</option>
+						<option value="25">Within 25 km</option>
+						<option value="50">Within 50 km</option>
+					</select>
+				</div>
+
+				<div class="filter-group" style="display: flex; align-items: center; gap: 10px;">
 					<label class="filter-label" for="commitment-filter" style="color: white; font-weight: 600;">Commitment:</label>
 					<select id="commitment-filter" class="filter-dropdown" style="background: #0f172a; color: white; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);">
 						<option value="all">Any Hours</option>
@@ -700,14 +711,6 @@
 						const liveOpportunities = dataRows.map(row => {
 							if (!row || row.length < 3) return null;
 
-							// Mapping strictly by column sequence left-to-right:
-							// row[0] = Timestamp
-							// row[1] = Opportunity Title
-							// row[2] = Organization Name
-							// row[3] = Description
-							// row[4] = Website Link
-							// row[5] = City/Location
-							// row[6] = Hours Required
 							const title = row[1] ? row[1].trim() : '';
 							const org = row[2] ? row[2].trim() : '';
 							const desc = row[3] ? row[3].trim() : 'No description provided.';
@@ -759,6 +762,7 @@
 			// UI Event Listeners
 			document.getElementById('location-filter').addEventListener('change', applyFilters);
 			document.getElementById('commitment-filter').addEventListener('change', applyFilters);
+			document.getElementById('distance-filter').addEventListener('change', applyFilters);
 
 			const popup = document.getElementById('popup');
 			const popupContent = document.getElementById('popup-content');
