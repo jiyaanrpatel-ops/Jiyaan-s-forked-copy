@@ -119,45 +119,11 @@
             animation: float 6s ease-in-out infinite;
         }
 
-        .particle-1 {
-            top: 20%; 
-            left: 10%; 
-            width: 8px; 
-            height: 8px; 
-            animation-delay: 0s;
-        }
-
-        .particle-2 {
-            top: 60%; 
-            left: 85%; 
-            width: 12px; 
-            height: 12px; 
-            animation-delay: 2s;
-        }
-
-        .particle-3 {
-            top: 80%; 
-            left: 20%; 
-            width: 6px; 
-            height: 6px; 
-            animation-delay: 4s;
-        }
-
-        .particle-4 {
-            top: 30%; 
-            left: 75%; 
-            width: 10px; 
-            height: 10px; 
-            animation-delay: 1s;
-        }
-
-        .particle-5 {
-            top: 70%; 
-            left: 60%; 
-            width: 8px; 
-            height: 8px; 
-            animation-delay: 3s;
-        }
+        .particle-1 { top: 20%; left: 10%; width: 8px; height: 8px; animation-delay: 0s; }
+        .particle-2 { top: 60%; left: 85%; width: 12px; height: 12px; animation-delay: 2s; }
+        .particle-3 { top: 80%; left: 20%; width: 6px; height: 6px; animation-delay: 4s; }
+        .particle-4 { top: 30%; left: 75%; width: 10px; height: 10px; animation-delay: 1s; }
+        .particle-5 { top: 70%; left: 60%; width: 8px; height: 8px; animation-delay: 3s; }
 
         /* Content Sections */
         .content-section {
@@ -232,4 +198,699 @@
 
         .about-image {
             position: relative;
-            border-radius: 2
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .about-content {
+            color: #f8f9fa;
+        }
+
+        .about-content h3 {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-family: Raleway, Helvetica, sans-serif;
+        }
+
+        .learn-more-btn {
+            display: inline-flex;
+            align-items: center;
+            background: white;
+            color: #2c3e50;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .learn-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            background: #f8f9fa;
+            color: #007bff !important;
+        }
+
+        /* Social Media Section */
+        .social-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-top: 60px;
+        }
+
+        .social-content {
+            color: #f8f9fa;
+        }
+
+        .social-content h3 {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .social-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-family: Raleway, Helvetica, sans-serif;
+        }
+
+        .social-image {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        /* Opportunities Grid */
+        .opportunities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .opportunity-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(40px);
+            position: relative;
+        }
+
+        .opportunity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .opportunity-card:hover::before {
+            left: 100%;
+        }
+
+        .opportunity-card.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .opportunity-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .opportunity-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 30px;
+        }
+
+        .card-content h3 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .card-content p {
+            color: #464c4d;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            font-family: Raleway, Helvetica, sans-serif;
+        }
+
+        .card-btn:hover {
+            background: #2c3e50;
+            transform: translateY(-2px);
+        }
+
+        .browse-all-btn {
+            display: inline-flex;
+            align-items: center;
+            background: white;
+            color: #2c3e50;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .browse-all-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            background: #f8f9fa;
+            color: #007bff !important;
+        }
+
+        /* Modern Popup Styling */
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .popup.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-content {
+            background: #2a2f3a;
+            border-radius: 20px;
+            padding: 0;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .popup.active .popup-content {
+            transform: scale(1);
+        }
+
+        .popup-header {
+            position: relative;
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+            height: 300px;
+        }
+
+        .popup-header img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .popup-title {
+            padding: 30px 30px 20px 30px;
+            color: #ffffff;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin: 0;
+            background: #2a2f3a;
+        }
+
+        .popup-body {
+            padding: 0 30px 30px 30px;
+            color: #e8e8e8;
+            line-height: 1.8;
+            font-size: 1.2rem;
+        }
+
+        .popup-body p {
+            margin: 0 0 20px 0;
+        }
+
+        .popup-info {
+            padding: 0 30px 10px 30px;
+            color: #b0b0b0;
+            font-size: 1rem;
+            border-bottom: 1px solid #404040;
+            margin-bottom: 20px;
+        }
+
+        .popup-info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .popup-info-item strong {
+            color: #4a90e2;
+            margin-right: 8px;
+            min-width: 80px;
+        }
+
+        .popup-info-item a {
+            color: #4a90e2;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .popup-info-item a:hover {
+            color: #357abd;
+        }
+
+        .popup-close {
+            position: static;
+            width: 100%;
+            height: 50px;
+            background: #4a90e2;
+            border: none;
+            border-radius: 0 0 20px 20px;
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .popup-close:hover {
+            background: #357abd;
+        }
+
+        .popup-close::before {
+            content: 'Close';
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+
+            .container {
+                padding: 0 25px;
+            }
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .about-grid,
+            .social-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .opportunities-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .content-section {
+                padding: 60px 0;
+            }
+
+            .popup-content {
+                width: 95%;
+                margin: 20px;
+            }
+            
+            .popup-title {
+                font-size: 1.5rem;
+                padding: 15px 20px 10px 20px;
+            }
+            
+            .popup-body {
+                padding: 0 20px 20px 20px;
+                font-size: 1.1rem;
+            }
+
+            .popup-info {
+                padding: 0 20px 10px 20px;
+            }
+            
+            .popup-header {
+                height: 250px;
+            }
+
+            /* Mobile header logo adjustments */
+            .header-logo {
+                width: 35px;
+                height: 35px;
+                margin-right: 10px;
+            }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+
+<body class="is-preload">
+    <div class="popup" id="popup">
+        <div class="popup-content" id="popup-content"></div>
+    </div>
+
+    <div id="page-wrapper">
+
+        <header id="header">
+            <h1><a href="index.html"><img src="images/causecircuit-logo.png" alt="CauseCircuit Logo" class="header-logo">CauseCircuit</a></h1>
+
+            <nav id="nav">
+                <ul class="links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="aboutus.html">About Us</a></li>
+                    <li><a href="opportunities.html">Opportunities</a></li>
+                </ul>
+            </nav>
+
+            <a href="#mobile-menu" id="mobile-menu-toggle">
+                <span class="icon fa-bars"></span>
+            </a>
+        </header>
+
+        <section class="hero-section">
+            <div class="hero-content">
+                <div class="logo">
+                    <img src="images/causecircuit-logo.png" alt="CauseCircuit Logo" class="logo-img">
+                </div>
+                <h1>CauseCircuit</h1>
+                <p>Volunteering Made Simple. Opportunities That Matter.</p>
+            </div>
+            <div class="particle particle-1"></div>
+            <div class="particle particle-2"></div>
+            <div class="particle particle-3"></div>
+            <div class="particle particle-4"></div>
+            <div class="particle particle-5"></div>
+        </section>
+
+        <section class="content-section section-blue">
+            <div class="container">
+                <div class="about-grid">
+                    <div class="about-image">
+                        <img src="images/image_e75c56.png" alt="About CauseCircuit" />
+                    </div>
+                    <div class="about-content">
+                        <h3>About Us</h3>
+                        <p>Cause Circuit is a youth driven organization that encourages high school students within the Durham Region to make a positive impact on their communities by getting involved in meaningful volunteer work, assisting in the creation of a compassionate and connected community.</p>
+                        <a href="aboutus.html" class="learn-more-btn">Learn more</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section section-alt">
+            <div class="container">
+                <div class="social-grid">
+                    <div class="social-content">
+                        <h3>Social Media</h3>
+                        <p>Check out our instagram page for updates and new information!</p>
+                        <a href="#" class="learn-more-btn">Learn more</a>
+                    </div>
+                    <div class="social-image">
+                        <img src="images/image_e77a21.png" alt="Social Media" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section section-blue">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Volunteer Opportunities</h2>
+                    <p>Here is a short list of some of the opportunities available in the Durham Region. Click "Learn more" to explore or shuffle through them!</p>
+                </div>
+                
+                <div style="text-align: center; margin-bottom: 40px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                    <a href="opportunities.html" class="browse-all-btn" style="margin-bottom: 0;">Browse All Opportunities</a>
+                    <button id="shuffle-btn" class="browse-all-btn" style="margin-bottom: 0; background: #34495e; color: white; border: none; cursor: pointer; display: none;">
+                        🔄 Shuffle Grid
+                    </button>
+                </div>
+
+                <div class="opportunities-grid" id="homepage-opportunities-container">
+                    <div style="text-align: center; color: white; width: 100%; grid-column: 1/-1; padding: 40px;">
+                        Loading live opportunities...
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <script>
+        let homepageOpportunities = [];
+        const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRINdpIfqYzmz7lNtKIkIuz75kA3wAOtAyE2lThkMty1Gpn7X9p3xIFLXV-hyX28PC-0LyFreFc1JXU/pub?gid=841646133&single=true&output=csv";
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const cardObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                }
+            });
+        }, observerOptions);
+
+        async function fetchLiveHomepageData() {
+            try {
+                const cacheBuster = `&t=${new Date().getTime()}`;
+                const response = await fetch(SHEET_CSV_URL + cacheBuster);
+                const csvText = await response.text();
+                
+                Papa.parse(csvText, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        const liveOpportunities = results.data.map(row => {
+                            const keys = Object.keys(row);
+                            
+                            const titleKey = keys.find(k => k.toLowerCase().includes('title') || k.toLowerCase().includes('name of opportunity') || k.toLowerCase().includes('position')) || keys[1];
+                            const orgKey = keys.find(k => k.toLowerCase().includes('organization') || k.toLowerCase().includes('company') || k.toLowerCase().includes('host')) || keys[2];
+                            const descKey = keys.find(k => k.toLowerCase().includes('description') || k.toLowerCase().includes('detail') || k.toLowerCase().includes('about')) || keys[3];
+                            const linkKey = keys.find(k => k.toLowerCase().includes('link') || k.toLowerCase().includes('website') || k.toLowerCase().includes('url') || k.toLowerCase().includes('form')) || keys[4];
+                            const cityKey = keys.find(k => k.toLowerCase().includes('city') || k.toLowerCase().includes('town') || k.toLowerCase().includes('location')) || keys[5];
+
+                            const title = row[titleKey] ? row[titleKey].trim() : '';
+                            const org = row[orgKey] ? row[orgKey].trim() : '';
+                            const desc = row[descKey] ? row[descKey].trim() : 'No description provided.';
+                            const webLink = row[linkKey] ? row[linkKey].trim() : '#';
+                            const city = row[cityKey] ? row[cityKey].trim() : 'Oshawa';
+
+                            if (!title || !org) return null;
+
+                            return {
+                                name: title,
+                                company: org,
+                                description: desc,
+                                imagePath: 'images/causecircuit-logo.png',
+                                website: webLink, 
+                                city: city
+                            };
+                        }).filter(item => item !== null);
+
+                        homepageOpportunities = liveOpportunities;
+
+                        const shuffleBtn = document.getElementById('shuffle-btn');
+                        if (shuffleBtn) {
+                            shuffleBtn.style.display = homepageOpportunities.length > 6 ? 'inline-flex' : 'none';
+                        }
+
+                        renderHomepageCards();
+                    }
+                });
+            } catch (error) {
+                console.error("Error loading live feed:", error);
+                document.getElementById('homepage-opportunities-container').innerHTML = 
+                    '<div style="text-align:center; color:white; width:100%; grid-column:1/-1;">Failed to sync live opportunities. Please try again later.</div>';
+            }
+        }
+
+        function renderHomepageCards() {
+            const container = document.getElementById('homepage-opportunities-container');
+            if (!container) return;
+
+            const existingCards = container.querySelectorAll('.opportunity-card');
+            existingCards.forEach(card => card.classList.remove('animate'));
+
+            setTimeout(() => {
+                container.innerHTML = '';
+
+                if (homepageOpportunities.length === 0) {
+                    container.innerHTML = '<div style="text-align:center; color:white; width:100%; grid-column:1/-1;">No opportunities available right now!</div>';
+                    return;
+                }
+
+                let shuffled = [...homepageOpportunities];
+                for (let i = shuffled.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+
+                const displayList = shuffled.slice(0, 6);
+
+                displayList.forEach((opp, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'opportunity-card';
+                    card.style.transitionDelay = `${index * 0.12}s`;
+
+                    let targetUrl = opp.website ? opp.website.trim() : '#';
+                    if (targetUrl !== '#' && targetUrl !== '' && !/^https?:\/\//i.test(targetUrl)) {
+                        targetUrl = 'https://' + targetUrl;
+                    }
+
+                    card.innerHTML = `
+                        <img src="${opp.imagePath}" alt="${opp.name}" onerror="this.src='images/causecircuit-logo.png'" />
+                        <div class="card-content">
+                            <h3>${opp.name}</h3>
+                            <p style="margin-bottom: 8px; color: #4a90e2; font-weight: 600;">${opp.company}</p>
+                            <p style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 72px;">
+                                ${opp.description}
+                            </p>
+                            <button class="card-btn special" data-website="${targetUrl}" data-city="${opp.city}">Learn more</button>
+                        </div>
+                    `;
+
+                    container.appendChild(card);
+                    cardObserver.observe(card);
+                });
+            }, existingCards.length > 0 ? 150 : 0);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchLiveHomepageData();
+
+            const shuffleBtn = document.getElementById('shuffle-btn');
+            if (shuffleBtn) {
+                shuffleBtn.addEventListener('click', renderHomepageCards);
+            }
+
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const heroContent = document.querySelector('.hero-content');
+                if (heroContent) {
+                    heroContent.style.transform = `translateY(${scrolled * 0.5}px)`;
+                }
+            });
+
+            document.querySelectorAll('.section-header').forEach(el => cardObserver.observe(el));
+        });
+
+        const popup = document.getElementById('popup');
+        const popupContent = document.getElementById('popup-content');
+
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('special')) {
+                event.preventDefault();
+
+                const card = event.target.closest('.opportunity-card');
+                if (card) {
+                    const opportunityName = card.querySelector('h3').textContent;
+                    const organizationImage = card.querySelector('img').src;
+                    const companyName = card.querySelector('p').textContent;
+                    
+                    const fullOpp = homepageOpportunities.find(opp => opp.name === opportunityName);
+                    const fullDescription = fullOpp ? fullOpp.description : card.querySelectorAll('p')[1].textContent;
+
+                    const website = event.target.getAttribute('data-website');
+                    const city = event.target.getAttribute('data-city');
+
+                    popupContent.innerHTML = `
+                        <h2 class="popup-title">${opportunityName}</h2>
+                        <div class="popup-header">
+                            <img src="${organizationImage}" alt="${opportunityName}" onerror="this.src='images/causecircuit-logo.png'" />
+                        </div>
+                        <div class="popup-info">
+                            <div class="popup-info-item">
+                                <strong>Host:</strong> ${companyName}
+                            </div>
+                            <div class="popup-info-item">
+                                <strong>Website:</strong> ${website !== '#' ? `<a href="${website}" target="_blank">${website}</a>` : 'Not Provided'}
+                            </div>
+                            <div class="popup-info-item">
+                                <strong>Location:</strong> ${city}
+                            </div>
+                        </div>
+                        <div class="popup-body">
+                            <p>${fullDescription}</p>
+                        </div>
+                        <button class="popup-close"></button>
+                    `;
+
+                    popup.classList.add('active');
+
+                    popupContent.querySelector('.popup-close').addEventListener('click', () => {
+                        popup.classList.remove('active');
+                    });
+                }
+            }
+        });
+
+        popup.addEventListener('click', (event) => {
+            if (event.target === popup) {
+                popup.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
