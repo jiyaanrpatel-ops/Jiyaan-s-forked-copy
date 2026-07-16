@@ -786,22 +786,16 @@
 	<script src="assets/js/main.js"></script>
 
 	<script>
-		// Core Data Array (Will strictly hold live dynamic data parsed from Sheets)
 		let volunteerOpportunities = [];
-
-		// Published Google Sheets CSV URL
 		const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRINdpIfqYzmz7lNtKIkIuz75kA3wAOtAyE2lThkMty1Gpn7X9p3xIFLXV-hyX28PC-0LyFreFc1JXU/pub?gid=841646133&single=true&output=csv";
 
-		// Centralized Filter Calculation
 		function filterOpportunities(location, commitment) {
 			let filtered = [...volunteerOpportunities];
 
-			// Filter by Location
 			if (location !== 'all') {
 				filtered = filtered.filter(opp => opp.city.toLowerCase() === location.toLowerCase());
 			}
 
-			// Filter by Time Commitment
 			if (commitment !== 'all') {
 				filtered = filtered.filter(opp => opp.timeCommitment === commitment);
 			}
@@ -809,7 +803,6 @@
 			return filtered;
 		}
 
-		// Opportunity card generator
 		function generateOpportunityCards(opportunities = volunteerOpportunities) {
 			const container = document.getElementById('opportunities-container');
 			if (!container) return;
@@ -830,13 +823,11 @@
 				
 				let hoursHTML = opportunity.hoursPerWeek ? `<div class="hours-per-week">Hours Required: ${opportunity.hoursPerWeek}</div>` : '';
 				
-				// Clean and format the website URL dynamically
 				let targetUrl = opportunity.website ? opportunity.website.trim() : '#';
 				if (targetUrl !== '#' && targetUrl !== '' && !/^https?:\/\//i.test(targetUrl)) {
 					targetUrl = 'https://' + targetUrl;
 				}
 
-				// Map website URL to button pathway
 				let buttonHTML = '';
 				if (targetUrl && targetUrl !== '#') {
 					buttonHTML = `<a href="${targetUrl}" target="_blank" class="card-btn" style="text-decoration: none; display: inline-flex; align-items: center;">Learn More</a>`;
@@ -861,7 +852,6 @@
 				container.appendChild(card);
 			});
 
-			// CSS transition animation helper via Intersection Observer
 			const cardObserver = new IntersectionObserver((entries) => {
 				entries.forEach(entry => {
 					if (entry.isIntersecting) {
@@ -875,7 +865,6 @@
 			});
 		}
 
-		// Filter controller trigger
 		function applyFilters() {
 			const locationFilter = document.getElementById('location-filter').value;
 			const commitmentFilter = document.getElementById('commitment-filter').value;
@@ -884,7 +873,6 @@
 			generateOpportunityCards(filteredOpportunities);
 		}
 
-		// Papa Parse Dynamic Fetch Route with Dynamic Header Mapping
 		async function fetchLiveSheetsData() {
 			try {
 				const cacheBuster = `&t=${new Date().getTime()}`;
@@ -892,22 +880,20 @@
 				const csvText = await response.text();
 				
 				Papa.parse(csvText, {
-					header: true, // Crucial change: Treats the 1st row as column names!
+					header: true,
 					skipEmptyLines: true,
 					complete: function(results) {
 						console.log("Parsed Sheet Data with Headers:", results.data);
 
 						const liveOpportunities = results.data.map(row => {
-							// Dynamic lookup - matches whatever your form questions are called!
-							// We look for common keywords in your column names to pair them correctly.
 							const keys = Object.keys(row);
-							
 							const titleKey = keys.find(k => k.toLowerCase().includes('title') || k.toLowerCase().includes('name of opportunity') || k.toLowerCase().includes('position')) || keys[1];
 							const orgKey = keys.find(k => k.toLowerCase().includes('organization') || k.toLowerCase().includes('company') || k.toLowerCase().includes('host')) || keys[2];
 							const descKey = keys.find(k => k.toLowerCase().includes('description') || k.toLowerCase().includes('detail') || k.toLowerCase().includes('about')) || keys[3];
 							const linkKey = keys.find(k => k.toLowerCase().includes('link') || k.toLowerCase().includes('website') || k.toLowerCase().includes('url') || k.toLowerCase().includes('form')) || keys[4];
 							const cityKey = keys.find(k => k.toLowerCase().includes('city') || k.toLowerCase().includes('town') || k.toLowerCase().includes('location')) || keys[5];
 							const hoursKey = keys.find(k => k.toLowerCase().includes('hour') || k.toLowerCase().includes('commitment') || k.toLowerCase().includes('time')) || keys[6];
+							const imgKey = keys.find(k => k.toLowerCase().includes('image') || k.toLowerCase().includes('logo') || k.toLowerCase().includes('pic')) || '';
 
 							const title = row[titleKey] ? row[titleKey].trim() : '';
 							const org = row[orgKey] ? row[orgKey].trim() : '';
@@ -916,12 +902,25 @@
 							const city = row[cityKey] ? row[cityKey].trim() : 'Oshawa';
 							const rawHours = row[hoursKey] ? row[hoursKey].trim() : '';
 
-							// Skip rendering this row if there is no actual volunteer title or company submitted
 							if (!title || !org) {
 								return null;
 							}
 
-							// Calculate commitments based on raw hours column
+							// Form upload photo validation and conversion 
+							let rawImagePath = (imgKey && row[imgKey]) ? row[imgKey].trim() : '';
+							let finalImagePath = 'images/causecircuit-logo.png';
+
+							if (rawImagePath) {
+								if (rawImagePath.includes('drive.google.com')) {
+									const matches = rawImagePath.match(/(?:id=|\/d\/)([a-zA-Z0-9-_]+)/);
+									if (matches && matches[1]) {
+										finalImagePath = `https://lh3.googleusercontent.com/d/$${matches[1]}`;
+									}
+								} else {
+									finalImagePath = rawImagePath;
+								}
+							}
+
 							const hoursNum = parseInt(rawHours, 10);
 							let commitment = 'flexible';
 							if (!isNaN(hoursNum)) {
@@ -941,7 +940,7 @@
 								company: org,
 								description: desc,
 								detailedDescription: desc,
-								imagePath: 'images/causecircuit-logo.png', // Defaults gracefully
+								imagePath: finalImagePath, 
 								website: webLink, 
 								city: city,
 								timeCommitment: commitment,
@@ -960,16 +959,13 @@
 			}
 		}
 
-		// DOM Initialization listeners
 		document.addEventListener('DOMContentLoaded', function() {
 			fetchLiveSheetsData();
 
-			// UI Event Listeners
 			document.getElementById('location-filter').addEventListener('change', applyFilters);
 			document.getElementById('commitment-filter').addEventListener('change', applyFilters);
 			document.getElementById('distance-filter').addEventListener('change', applyFilters);
 
-			// Use Location button click listener
 			document.getElementById('use-location').addEventListener('click', function() {
 				console.log("Use Location button clicked.");
 			});
@@ -977,7 +973,6 @@
 			const popup = document.getElementById('popup');
 			const popupContent = document.getElementById('popup-content');
 
-			// Modal detail view setup
 			document.addEventListener('click', function(event) {
 				if (event.target.classList.contains('special') || event.target.closest('.card-btn')) {
 					const card = event.target.closest('.opportunity-card');
@@ -986,13 +981,11 @@
 						const opportunity = volunteerOpportunities.find(opp => opp.name === titleText);
 
 						if (opportunity) {
-							// Check if we want to open external link directly or trigger a popup details card
 							let targetUrl = opportunity.website ? opportunity.website.trim() : '#';
 							if (targetUrl !== '#' && targetUrl !== '' && !/^https?:\/\//i.test(targetUrl)) {
 								targetUrl = 'https://' + targetUrl;
 							}
 
-							// If they clicked "Learn More" on a card with no link, open details popup
 							if (event.target.classList.contains('special')) {
 								event.preventDefault();
 								popupContent.innerHTML = `
@@ -1027,7 +1020,6 @@
 				}
 			});
 
-			// Parallax scroll helper
 			window.addEventListener('scroll', () => {
 				const scrolled = window.pageYOffset;
 				const heroContent = document.querySelector('.hero-content');
