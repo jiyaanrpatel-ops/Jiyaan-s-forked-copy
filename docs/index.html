@@ -1,7 +1,5 @@
 <!DOCTYPE HTML>
-
 <html>
-
 <head>
 	<title>CauseCircuit</title>
 	<meta charset="utf-8" />
@@ -598,7 +596,6 @@
 			.container {
 				padding: 0 25px;
 			}
-
 			.section-header h2 {
 				font-size: 2rem;
 			}
@@ -649,21 +646,19 @@
 			}
 		}
 	</style>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 </head>
 
 <body class="is-preload">
 	<div class="popup" id="popup">
-  		<div class="popup-content" id="popup-content"></div>
+		<div class="popup-content" id="popup-content"></div>
 	</div>
 
-	<!-- Page Wrapper -->
 	<div id="page-wrapper">
 
-		<!-- Header -->
 		<header id="header">
 			<h1><a href="index.html"><img src="images/causecircuit-logo.png" alt="CauseCircuit Logo" class="header-logo">CauseCircuit</a></h1>
 
-			<!-- Desktop Navigation -->
 			<nav id="nav">
 				<ul class="links">
 					<li><a href="index.html">Home</a></li>
@@ -672,13 +667,11 @@
 				</ul>
 			</nav>
 
-			<!-- Mobile Menu Toggle -->
 			<a href="#mobile-menu" id="mobile-menu-toggle">
 				<span class="icon fa-bars"></span>
 			</a>
 		</header>
 
-		<!-- Hero Section -->
 		<section class="hero-section">
 			<div class="hero-content">
 				<div class="logo">
@@ -687,7 +680,6 @@
 				<h1>CauseCircuit</h1>
 				<p>Volunteering Made Simple. Opportunities That Matter.</p>
 			</div>
-			<!-- Floating Particles -->
 			<div class="particle particle-1"></div>
 			<div class="particle particle-2"></div>
 			<div class="particle particle-3"></div>
@@ -695,7 +687,6 @@
 			<div class="particle particle-5"></div>
 		</section>
 
-		<!-- About Section -->
 		<section class="content-section section-blue">
 			<div class="container">
 				<div class="about-grid">
@@ -711,7 +702,6 @@
 			</div>
 		</section>
 
-		<!-- Social Media Section -->
 		<section class="content-section section-alt">
 			<div class="container">
 				<div class="social-grid">
@@ -727,56 +717,29 @@
 			</div>
 		</section>
 
-		<!-- Opportunities Section -->
 		<section class="content-section section-blue">
 			<div class="container">
 				<div class="section-header">
 					<h2>Volunteer Opportunities</h2>
-					<p>Here is a short list of some of the opportunities available in the Durham Region, click learn more to check out the full list!</p>
+					<p>Here is a short list of some of the opportunities available in the Durham Region. Click "Learn more" to explore or shuffle through them!</p>
 				</div>
-				<div style="text-align: center;">
-					<a href="opportunities.html" class="browse-all-btn">Browse All Opportunities</a>
+				
+				<div style="text-align: center; margin-bottom: 40px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+					<a href="opportunities.html" class="browse-all-btn" style="margin-bottom: 0;">Browse All Opportunities</a>
+					<button id="shuffle-btn" class="browse-all-btn" style="margin-bottom: 0; background: #34495e; color: white; border: none; cursor: pointer; display: none;">
+						🔄 Shuffle Grid
+					</button>
 				</div>
-				<div class="opportunities-grid">
-					<div class="opportunity-card">
-						<img src="images/organizationlogo/feedtheneedy.jpg" alt="Feed The Needy in Durham" />
-						<div class="card-content">
-							<h3>Feed The Needy in Durham</h3>
-							<p>Feed the Need in Durham is a non-profit organization dedicated to alleviating hunger in the Durham region.</p>
-							<button class="card-btn special" data-website="https://www.feedtheneedindurham.org" data-city="Oshawa">Learn more</button>
-						</div>
-					</div>
-					<div class="opportunity-card">
-						<img src="images/pic05.jpg" alt="Durham Youth Mentorship" />
-						<div class="card-content">
-							<h3>Durham Youth Mentorship</h3>
-							<p>Empowering young people through mentorship programs and educational support initiatives.</p>
-							<button class="card-btn special" data-website="https://www.durhamyouthmentorship.ca" data-city="Whitby">Learn more</button>
-						</div>
-					</div>
-					<div class="opportunity-card">
-						<img src="images/pic06.jpg" alt="Community Garden Alliance" />
-						<div class="card-content">
-							<h3>Community Garden Alliance</h3>
-							<p>Growing fresh produce and fostering community connections through sustainable gardening practices.</p>
-							<button class="card-btn special" data-website="https://www.communitygardenalliance.org" data-city="Ajax">Learn more</button>
-						</div>
-					</div>
-					<div class="opportunity-card">
-						<img src="images/pic07.jpg" alt="Senior Support Services" />
-						<div class="card-content">
-							<h3>Senior Support Services</h3>
-							<p>Providing companionship and assistance to elderly community members to enhance their quality of life.</p>
-							<button class="card-btn special" data-website="https://www.seniorsupportdurham.ca" data-city="Pickering">Learn more</button>
-						</div>
+
+				<div class="opportunities-grid" id="homepage-opportunities-container">
+					<div style="text-align: center; color: white; width: 100%; grid-column: 1/-1; padding: 40px;">
+						Loading live opportunities...
 					</div>
 				</div>
 			</div>
-		</div>
-
+		</section>
 	</div>
 
-	<!-- Scripts -->
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="assets/js/jquery.scrollex.min.js"></script>
 	<script src="assets/js/browser.min.js"></script>
@@ -785,13 +748,15 @@
 	<script src="assets/js/main.js"></script>
 
 	<script>
-		// Intersection Observer for animations
+		let homepageOpportunities = [];
+		const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRINdpIfqYzmz7lNtKIkIuz75kA3wAOtAyE2lThkMty1Gpn7X9p3xIFLXV-hyX28PC-0LyFreFc1JXU/pub?gid=841646133&single=true&output=csv";
+
 		const observerOptions = {
 			threshold: 0.1,
 			rootMargin: '0px 0px -50px 0px'
 		};
 
-		const observer = new IntersectionObserver((entries) => {
+		const cardObserver = new IntersectionObserver((entries) => {
 			entries.forEach(entry => {
 				if (entry.isIntersecting) {
 					entry.target.classList.add('animate');
@@ -799,70 +764,173 @@
 			});
 		}, observerOptions);
 
-		// Observe elements for animation
-		document.addEventListener('DOMContentLoaded', () => {
-			const elementsToAnimate = document.querySelectorAll('.section-header, .opportunity-card');
-			elementsToAnimate.forEach(el => observer.observe(el));
+		async function fetchLiveHomepageData() {
+			try {
+				const cacheBuster = `&t=${new Date().getTime()}`;
+				const response = await fetch(SHEET_CSV_URL + cacheBuster);
+				const csvText = await response.text();
+				
+				Papa.parse(csvText, {
+					header: true,
+					skipEmptyLines: true,
+					complete: function(results) {
+						const liveOpportunities = results.data.map(row => {
+							const keys = Object.keys(row);
+							
+							const titleKey = keys.find(k => k.toLowerCase().includes('title') || k.toLowerCase().includes('name of opportunity') || k.toLowerCase().includes('position')) || keys[1];
+							const orgKey = keys.find(k => k.toLowerCase().includes('organization') || k.toLowerCase().includes('company') || k.toLowerCase().includes('host')) || keys[2];
+							const descKey = keys.find(k => k.toLowerCase().includes('description') || k.toLowerCase().includes('detail') || k.toLowerCase().includes('about')) || keys[3];
+							const linkKey = keys.find(k => k.toLowerCase().includes('link') || k.toLowerCase().includes('website') || k.toLowerCase().includes('url') || k.toLowerCase().includes('form')) || keys[4];
+							const cityKey = keys.find(k => k.toLowerCase().includes('city') || k.toLowerCase().includes('town') || k.toLowerCase().includes('location')) || keys[5];
 
-			// Add staggered animation delays
-			document.querySelectorAll('.opportunity-card').forEach((card, index) => {
-				card.style.transitionDelay = `${index * 0.2}s`;
-			});
-		});
+							const title = row[titleKey] ? row[titleKey].trim() : '';
+							const org = row[orgKey] ? row[orgKey].trim() : '';
+							const desc = row[descKey] ? row[descKey].trim() : 'No description provided.';
+							const webLink = row[linkKey] ? row[linkKey].trim() : '#';
+							const city = row[cityKey] ? row[cityKey].trim() : 'Oshawa';
 
-		// Smooth parallax effect for hero section
-		window.addEventListener('scroll', () => {
-			const scrolled = window.pageYOffset;
-			const heroContent = document.querySelector('.hero-content');
-			if (heroContent) {
-				heroContent.style.transform = `translateY(${scrolled * 0.5}px)`;
+							if (!title || !org) return null;
+
+							return {
+								name: title,
+								company: org,
+								description: desc,
+								imagePath: 'images/causecircuit-logo.png',
+								website: webLink, 
+								city: city
+							};
+						}).filter(item => item !== null);
+
+						homepageOpportunities = liveOpportunities;
+
+						const shuffleBtn = document.getElementById('shuffle-btn');
+						if (shuffleBtn) {
+							shuffleBtn.style.display = homepageOpportunities.length > 6 ? 'inline-flex' : 'none';
+						}
+
+						renderHomepageCards();
+					}
+				});
+			} catch (error) {
+				console.error("Error loading live feed:", error);
+				document.getElementById('homepage-opportunities-container').innerHTML = 
+					'<div style="text-align:center; color:white; width:100%; grid-column:1/-1;">Failed to sync live opportunities. Please try again later.</div>';
 			}
+		}
+
+		function renderHomepageCards() {
+			const container = document.getElementById('homepage-opportunities-container');
+			if (!container) return;
+
+			const existingCards = container.querySelectorAll('.opportunity-card');
+			existingCards.forEach(card => card.classList.remove('animate'));
+
+			setTimeout(() => {
+				container.innerHTML = '';
+
+				if (homepageOpportunities.length === 0) {
+					container.innerHTML = '<div style="text-align:center; color:white; width:100%; grid-column:1/-1;">No opportunities available right now!</div>';
+					return;
+				}
+
+				let shuffled = [...homepageOpportunities];
+				for (let i = shuffled.length - 1; i > 0; i--) {
+					const j = Math.floor(Math.random() * (i + 1));
+					[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+				}
+
+				const displayList = shuffled.slice(0, 6);
+
+				displayList.forEach((opp, index) => {
+					const card = document.createElement('div');
+					card.className = 'opportunity-card';
+					card.style.transitionDelay = `${index * 0.12}s`;
+
+					let targetUrl = opp.website ? opp.website.trim() : '#';
+					if (targetUrl !== '#' && targetUrl !== '' && !/^https?:\/\//i.test(targetUrl)) {
+						targetUrl = 'https://' + targetUrl;
+					}
+
+					card.innerHTML = `
+						<img src="${opp.imagePath}" alt="${opp.name}" onerror="this.src='images/causecircuit-logo.png'" />
+						<div class="card-content">
+							<h3>${opp.name}</h3>
+							<p style="margin-bottom: 8px; color: #4a90e2; font-weight: 600;">${opp.company}</p>
+							<p style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 72px;">
+								${opp.description}
+							</p>
+							<button class="card-btn special" data-website="${targetUrl}" data-city="${opp.city}">Learn more</button>
+						</div>
+					`;
+
+					container.appendChild(card);
+					cardObserver.observe(card);
+				});
+			}, existingCards.length > 0 ? 150 : 0);
+		}
+
+		document.addEventListener('DOMContentLoaded', () => {
+			fetchLiveHomepageData();
+
+			const shuffleBtn = document.getElementById('shuffle-btn');
+			if (shuffleBtn) {
+				shuffleBtn.addEventListener('click', renderHomepageCards);
+			}
+
+			window.addEventListener('scroll', () => {
+				const scrolled = window.pageYOffset;
+				const heroContent = document.querySelector('.hero-content');
+				if (heroContent) {
+					heroContent.style.transform = `translateY(${scrolled * 0.5}px)`;
+				}
+			});
+
+			document.querySelectorAll('.section-header').forEach(el => cardObserver.observe(el));
 		});
 
-		// Get references to the popup elements
 		const popup = document.getElementById('popup');
 		const popupContent = document.getElementById('popup-content');
 
-		// Event delegation for "Learn more" buttons
 		document.addEventListener('click', function(event) {
 			if (event.target.classList.contains('special')) {
-				// Prevent the default link behavior
 				event.preventDefault();
 
-				// Get the parent opportunity card element of the clicked button
 				const card = event.target.closest('.opportunity-card');
 				if (card) {
-					// Extract data from the card
-					const organizationName = card.querySelector('h3').textContent;
+					const opportunityName = card.querySelector('h3').textContent;
 					const organizationImage = card.querySelector('img').src;
-					const organizationDescription = card.querySelector('p').textContent;
+					const companyName = card.querySelector('p').textContent;
+					
+					const fullOpp = homepageOpportunities.find(opp => opp.name === opportunityName);
+					const fullDescription = fullOpp ? fullOpp.description : card.querySelectorAll('p')[1].textContent;
+
 					const website = event.target.getAttribute('data-website');
 					const city = event.target.getAttribute('data-city');
 
-					// Populate the popup content dynamically
 					popupContent.innerHTML = `
-						<h2 class="popup-title">${organizationName}</h2>
+						<h2 class="popup-title">${opportunityName}</h2>
 						<div class="popup-header">
-							<img src="${organizationImage}" alt="${organizationName}" />
+							<img src="${organizationImage}" alt="${opportunityName}" onerror="this.src='images/causecircuit-logo.png'" />
 						</div>
 						<div class="popup-info">
 							<div class="popup-info-item">
-								<strong>Website:</strong> <a href="${website}" target="_blank">${website}</a>
+								<strong>Host:</strong> ${companyName}
+							</div>
+							<div class="popup-info-item">
+								<strong>Website:</strong> ${website !== '#' ? `<a href="${website}" target="_blank">${website}</a>` : 'Not Provided'}
 							</div>
 							<div class="popup-info-item">
 								<strong>Location:</strong> ${city}
 							</div>
 						</div>
 						<div class="popup-body">
-							<p>${organizationDescription}</p>
+							<p>${fullDescription}</p>
 						</div>
 						<button class="popup-close"></button>
 					`;
 
-					// Show the popup
 					popup.classList.add('active');
 
-					// Add event listener for the close button inside the popup
 					popupContent.querySelector('.popup-close').addEventListener('click', () => {
 						popup.classList.remove('active');
 					});
@@ -870,14 +938,11 @@
 			}
 		});
 
-		// Event listener to close the popup when clicking outside its content
 		popup.addEventListener('click', (event) => {
 			if (event.target === popup) {
 				popup.classList.remove('active');
 			}
 		});
 	</script>
-
 </body>
-
 </html>
